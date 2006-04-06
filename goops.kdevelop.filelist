@@ -33,3 +33,7 @@ gffti/v_rfft_h_z_ccs.C
 gffti/v_rfft_h_z_ccs.h
 gffti/v_rfft_h_z_ssc.C
 gffti/v_rfft_h_z_ssc.h
+gffti/fftw_types.h
+gffti/fft.h
+gffti/fft.C
+gffti/fft_types.h
