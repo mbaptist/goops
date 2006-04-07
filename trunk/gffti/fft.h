@@ -12,23 +12,27 @@
 
 #include "fft_types.h"
 
-template <class TR,calss TF>
+template <class RealType,class FourierType>
 class FFT
 {
 private:
 	//Types	
-	typedef typename FFT_TYPES<TR,TF>::Real RT;
-	typedef typename FFT_TYPES<TR,TF>::Complex FT;
+	typedef typename FFT_TYPES<RealType,FourierType>::RDT RDT;
+	typedef typename FFT_TYPES<RealType,FourierType>::FDT FDT;
+	typename FFT_TYPES<RealType,FourierType>::Plan Plan;
+	typedef typename FFT_TYPES<RealType,FourierType>::SizeT SizeT;
 	//Members
-	RT * realdata;
-	FT * fourierdata;
-	typename FFT_TYPES<TR,TF>::Direct_plan direct_plan;
-	typename FFT_TYPES<TR,TF>::Inverse_plan inverse_plan;
+	RDT * realdata;
+	FDT * fourierdata;
+	Plan direct_plan,inverse_plan;
+	//Sizes
+	ST realshape;
+	ST fouriershape;
 
 public:
 	//Ctors
-	FFT(typename FFT_TYPES<TR,TF>::ST size);//Ctor from size
-	FFT(TR & realfield,TF	& fourierfield);//Ctor from fields
+	FFT(typename FFT_TYPES<RealType,FourierType>::SizeT shape);//Ctor from size
+	FFT(RealType & realfield,FourierType	& fourierfield);//Ctor from fields
 	//Dtor
 	~FFT();
 
@@ -39,7 +43,11 @@ private:
 	
 private:
 	//Private methods 	
-	void set_data(TR & realfield,TF	& fourierfield);
+	void set_data(RealType & realfield,FourierType	& fourierfield);
+	
+	void allocate_data();
+	void free_data();	
+
 	void create_plans();
 	void destroy_plans();
 
