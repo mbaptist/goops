@@ -1,13 +1,13 @@
 // -*- C++ -*-
 
 ////////////////////////////////////////////////////
-// fftw_types
+// fft_types
 //
 // Provides a C++ interface to fftw types
 //
 ///////////////////////////////////////////////////
-#ifndef FFTW_TYPES_H
-#define FFTW_TYPES_H
+#ifndef FFT_TYPES_H
+#define FFT_TYPES_H
 
 #include <cat.h>
 
@@ -45,14 +45,14 @@ template <int D>
 //Vector Fields
 
 template <class REAL>
-struct FFTW_Precision
+	struct FFTW_Precision
 {
 	typedef REAL Real;
 	typedef	std::complex<Real> Complex;
 	typedef	fftw_plan Plan;
 }
 template <>
-struct FFTW_Precision<float>
+	struct FFTW_Precision<float>
 {
 	typedef float Real;
 	typedef	std::complex<float> Complex;
@@ -69,13 +69,13 @@ struct FFTW_Precision<float>
 template <class Real,class ArrayRank,class VectorSize>
 struct GFFTI
 {
-	typedef Real RS;///Real scalars
-	typedef std::complex<RT> CV;//Complex scalars
-	typedef cat::tvector<RT,VectorSize> RV;//Real vectors
-	typedef cat::tvector<CT,VectorSize> CV;//Complex Vectors
-	typedef cat::array<RT,ArrayRank> RSF;//Real Scalar Fields
-	typedef cat::array<CT,ArrayRank> CSF;//Complex Scalar Fields
-	typedef cat::array<RV,ArrayRank> RVF;//Real Vector Fields
-	typedef cat::array<CV,ArrayRank> CVF;//Complex Vector Fields
+typedef Real RS;///Real scalars
+typedef std::complex<RT> CV;//Complex scalars
+typedef cat::tvector<RT,VectorSize> RV;//Real vectors
+typedef cat::tvector<CT,VectorSize> CV;//Complex Vectors
+typedef cat::array<RT,ArrayRank> RSF;//Real Scalar Fields
+typedef cat::array<CT,ArrayRank> CSF;//Complex Scalar Fields
+typedef cat::array<RV,ArrayRank> RVF;//Real Vector Fields
+typedef cat::array<CV,ArrayRank> CVF;//Complex Vector Fields
 };
 #endif
