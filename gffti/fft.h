@@ -10,50 +10,77 @@
 //
 //
 
+#ifndef FFT_H
+#define FFT_H
+
+namespace goops
+{
+
 #include "fft_types.h"
 
 template <class RealType,class FourierType>
-class FFT
+	class FFT
 {
 private:
-	//Types	
+	//Types
 	typedef typename FFT_TYPES<RealType,FourierType>::RDT RDT;
 	typedef typename FFT_TYPES<RealType,FourierType>::FDT FDT;
 	typename FFT_TYPES<RealType,FourierType>::Plan Plan;
-	typedef typename FFT_TYPES<RealType,FourierType>::SizeT SizeT;
 	//Members
 	RDT * realdata;
 	FDT * fourierdata;
 	Plan direct_plan,inverse_plan;
 	//Sizes
-	ST realshape;
-	ST fouriershape;
-
+	size_t realsize;
+	size_t fouriersize;
+	
 public:
 	//Ctors
-	FFT(typename FFT_TYPES<RealType,FourierType>::SizeT shape);//Ctor from size
-	FFT(RealType & realfield,FourierType	& fourierfield);//Ctor from fields
+	FFT();//Default Ctor
 	//Dtor
 	~FFT();
-
+	
 private:
 	//Forbidden Ctors
-	FFT();//Default ctor
 	FFT(const & FFT);//Copy ctor
 	
 private:
-	//Private methods 	
-	void set_data(RealType & realfield,FourierType	& fourierfield);
-	
-	void allocate_data();
-	void free_data();	
-
+	//Private methods
 	void create_plans();
 	void destroy_plans();
-
+	
 public:
 	//Public methods
-	//void switchmode();
-	
-	
+	void direct_transform(FourierType & fourierfield,RealType & realfield);
+	void inverse_transform(RealType & realfield,FourierType & fourierfield);
+	//FourierType direct_transform(const RealType & realfield);
+	//RealType inverse_transform(const FourierType & fourierfield);
 };
+
+
+
+template <int D>
+	template <class RealType,class FourierType>
+	class FFT<cat::array<RS,D>,cat::array<RS,D> > : public FFT<RealType,FourierType>
+{
+public:
+	FFT(const string & subtype);
+};
+
+template <int D>
+	template <class RealType,class FourierType>
+	class FFT<cat::array<cat::tvector<RS,N>,D>,cat::array<cat::tvector<RS,N>,D> > : public FFT<RealType,FourierType>
+{
+public:
+	FFT(const string & subtype);
+};
+
+
+}
+
+
+
+
+#include "fft.C"
+
+#endif
