@@ -10,20 +10,16 @@
 #define FFT_H
 
 
-//scalar complex/complex transforms
-#include "s_fft.h"
+//scalar and  vector
+//complex to complex and real to complex
+//transforms
+#include "fft.h"
 
 //scalar complex/complex transforms, heterogeneous along z
 //Only defined for D=3
 //in x,y s_rfft is used, in z sin or cos is used according
 //to template flag 
 #include "s_fft_h_z.h"
-
-//scalar real/complex transforms
-#include "s_rfft.h"
-
-//vector real/complex transforms
-#include "v_rfft.h"
 
 //scalar cosine transforms in one dimension
 #include "s_cosfft_1d.h"

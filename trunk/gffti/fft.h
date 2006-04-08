@@ -13,10 +13,13 @@
 #ifndef FFT_H
 #define FFT_H
 
-namespace goops
-{
 
 #include "fft_types.h"
+
+#include <fftw3.h>
+
+namespace goops
+{
 
 template <class RealType,class FourierType>
 	class FFT
@@ -25,14 +28,13 @@ private:
 	//Types
 	typedef typename FFT_TYPES<RealType,FourierType>::RDT RDT;
 	typedef typename FFT_TYPES<RealType,FourierType>::FDT FDT;
-	typename FFT_TYPES<RealType,FourierType>::Plan Plan;
 	//Members
 	RDT * realdata;
 	FDT * fourierdata;
-	Plan direct_plan,inverse_plan;
-	//Sizes
-	size_t realsize;
-	size_t fouriersize;
+	Plan direct_plan;
+	Plan inverse_plan;
+	//Size
+	size_t size;
 	
 public:
 	//Ctors
@@ -42,7 +44,7 @@ public:
 	
 private:
 	//Forbidden Ctors
-	FFT(const & FFT);//Copy ctor
+	FFT(const FFT &);//Copy ctor
 	
 private:
 	//Private methods
@@ -59,27 +61,24 @@ public:
 
 
 
-template <int D>
-	template <class RealType,class FourierType>
-	class FFT<cat::array<RS,D>,cat::array<RS,D> > : public FFT<RealType,FourierType>
-{
-public:
-	FFT(const string & subtype);
-};
-
-template <int D>
-	template <class RealType,class FourierType>
-	class FFT<cat::array<cat::tvector<RS,N>,D>,cat::array<cat::tvector<RS,N>,D> > : public FFT<RealType,FourierType>
-{
-public:
-	FFT(const string & subtype);
-};
+// template <int D>
+// 	template <class RealType,class FourierType>
+// 	class FFT<cat::array<RS,D>,cat::array<RS,D> > : public FFT<RealType,FourierType>
+// {
+// public:
+// 	FFT(const string & subtype);
+// };
+// 
+// template <int D,int N>
+// 	template <class RealType,class FourierType>
+// 	class FFT<cat::array<cat::tvector<RS,N>,D>,cat::array<cat::tvector<RS,N>,D> > : public FFT<RealType,FourierType>
+// {
+// public:
+// 	FFT(const string & subtype);
+// };
 
 
 }
-
-
-
 
 #include "fft.C"
 

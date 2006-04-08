@@ -9,9 +9,12 @@
 #ifndef FFT_TYPES_H
 #define FFT_TYPES_H
 
+
 #include <cat.h>
 
 #include <complex>
+
+#include <fftw3.h>
 
 namespace goops
 {
@@ -30,20 +33,53 @@ template <int D>
 {
 	typedef CS RDT;
 	typedef CS FDT;
-}
+};
 //Vector Fields
+template <int D,int N>
+	struct FFT_TYPES<cat::array<cat::tvector<CS,N>,D>,cat::array<cat::tvector<CS,N>,D> >
+{
+	typedef CS RDT;
+	typedef CS FDT;
+};
 
 //Real to Complex / Complex to Real
 //Scalars Fields
-
+template <int D>
+	struct FFT_TYPES<cat::array<RS,D>,cat::array<CS,D> >
+{
+	typedef RS RDT;
+	typedef CS FDT;
+};
 //Vector Fields
-
+template <int D,int N>
+	struct FFT_TYPES<cat::array<cat::tvector<RS,N>,D>,cat::array<cat::tvector<CS,N>,D> >
+{
+	typedef RS RDT;
+	typedef CS FDT;
+};
 
 //Real to Real
 //Scalars Fields
-
+template <int D>
+	struct FFT_TYPES<cat::array<RS,D>,cat::array<RS,D> >
+{
+	typedef RS RDT;
+	typedef RS FDT;
+};
 //Vector Fields
+template <int D,int N>
+	struct FFT_TYPES<cat::array<cat::tvector<RS,N>,D>,cat::array<cat::tvector<RS,N>,D> >
+{
+	typedef RS RDT;
+	typedef RS FDT;
+};
 
+}
+
+#endif
+
+
+#if 0
 template <class REAL>
 	struct FFTW_Precision
 {
@@ -58,12 +94,7 @@ template <>
 	typedef	std::complex<float> Complex;
 	typedef	fftw_plan Plan;
 }
-
-}
-
 #endif
-
-
 #if 0
 #include <cat.h>
 template <class Real,class ArrayRank,class VectorSize>
