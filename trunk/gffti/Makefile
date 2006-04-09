@@ -14,10 +14,13 @@ OBJECTS = s_cosfft_1d.o s_sinfft_1d.o v_rfft_h_z_ssc.o v_rfft_h_z_ccs.o
 
 ########################################################################
 
-all: $(OBJECTS)
+all:
+	g++ -I../../cat/ testgffti.C -o testgffti
 
-%.o: %.C *.h
-	$(CXX) $(INCLUDE) -c $<
+#$(OBJECTS)
+
+#%.o: %.C *.h
+#	$(CXX) $(INCLUDE) -c $<
 
 clean:
 	@rm -rfv *~ *.o
