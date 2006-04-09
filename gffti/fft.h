@@ -1,7 +1,7 @@
 //
 // C++ Interface: fft
 //
-// Description: 
+// Description:
 //
 //
 // Author: Manuel Baptista <mbaptist@fc.up.pt>, (C) 2006
@@ -60,6 +60,11 @@ public:
 };
 
 
+// template <int D>
+// 	template <>
+// 	class FFT <cat::array<RS,D>,cat::array<CS,D> >
+// {
+// };
 
 // template <int D>
 // 	template <class RealType,class FourierType>
@@ -68,7 +73,7 @@ public:
 // public:
 // 	FFT(const string & subtype);
 // };
-// 
+//
 // template <int D,int N>
 // 	template <class RealType,class FourierType>
 // 	class FFT<cat::array<cat::tvector<RS,N>,D>,cat::array<cat::tvector<RS,N>,D> > : public FFT<RealType,FourierType>

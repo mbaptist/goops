@@ -52,7 +52,13 @@ void FFT<RealType,FourierType>::inverse_transform(RealType & realfield,FourierTy
 	realfield/=size;
 }
 
-//Generic dstroy plan
+//Generic create plans
+template <class RealType,class FourierType>
+	void FFT<RealType,FourierType>::create_plans()
+{
+}
+
+//Generic destroy plans
 template <class RealType,class FourierType>
 	void FFT<RealType,FourierType>::destroy_plans()
 {
@@ -62,12 +68,11 @@ template <class RealType,class FourierType>
 
 
 
-//Partial specialization
-
-
+//Specialization
 
 
 template <int D>
+	//template <>
 	void FFT<cat::array<RS,D>,cat::array<CS,D> >::create_plans()
 {
 	direct_plan=fftw_plan_dft_r2c_1d(&size,realdata,fourierdata,FFTW_ESTIMATE);
@@ -77,3 +82,4 @@ template <int D>
 
 
 
+}
