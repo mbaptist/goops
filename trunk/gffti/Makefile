@@ -15,7 +15,7 @@ OBJECTS = s_cosfft_1d.o s_sinfft_1d.o v_rfft_h_z_ssc.o v_rfft_h_z_ccs.o
 ########################################################################
 
 all:
-	g++ -I../../cat/ testgffti.C -o testgffti
+	g++ -I../../cat/ testgffti.C -o testgffti -l fftw3 -g
 
 #$(OBJECTS)
 
