@@ -22,9 +22,9 @@ namespace goops
 {
 
 template <class RealType,class FourierType>
-	class FFT
+	class FFT_BASE
 {
-private:
+protected:
 	//Types
 	typedef typename FFT_TYPES<RealType,FourierType>::RDT RDT;
 	typedef typename FFT_TYPES<RealType,FourierType>::FDT FDT;
@@ -34,22 +34,26 @@ private:
 	Plan direct_plan;
 	Plan inverse_plan;
 	//Size
-	size_t size;
+	int realsize;
+	int fouriersize;
+	bool plans_created;
 	
-public:
+protected:
 	//Ctors
-	FFT();//Default Ctor
+	FFT_BASE();//Default Ctor
 	//Dtor
-	~FFT();
+	~FFT_BASE();
 	
 private:
 	//Forbidden Ctors
-	FFT(const FFT &);//Copy ctor
+	FFT_BASE(const FFT_BASE &);//Copy ctor
 	
-private:
+protected:
 	//Private methods
 	void create_plans();
+	virtual void do_create_plans()=0;
 	void destroy_plans();
+	void switch_data(RealType & realfield,FourierType & fourierfield);
 	
 public:
 	//Public methods
@@ -60,27 +64,59 @@ public:
 };
 
 
-// template <int D>
-// 	template <>
-// 	class FFT <cat::array<RS,D>,cat::array<CS,D> >
-// {
-// };
+template <class RealType,class FourierType>
+	class FFT: public FFT_BASE<RealType,FourierType>
+{
+};
 
-// template <int D>
-// 	template <class RealType,class FourierType>
-// 	class FFT<cat::array<RS,D>,cat::array<RS,D> > : public FFT<RealType,FourierType>
-// {
-// public:
-// 	FFT(const string & subtype);
-// };
-//
-// template <int D,int N>
-// 	template <class RealType,class FourierType>
-// 	class FFT<cat::array<cat::tvector<RS,N>,D>,cat::array<cat::tvector<RS,N>,D> > : public FFT<RealType,FourierType>
-// {
-// public:
-// 	FFT(const string & subtype);
-// };
+template <>
+	template <int D>
+	class FFT<cat::array<CS,D>,cat::array<CS,D> >: public FFT_BASE<cat::array<CS,D>,cat::array<CS,D> >
+{
+	using FFT_BASE<cat::array<CS,D>,cat::array<CS,D> >::realdata;
+	using FFT_BASE<cat::array<CS,D>,cat::array<CS,D> >::fourierdata;
+	using FFT_BASE<cat::array<CS,D>,cat::array<CS,D> >::direct_plan;
+	using FFT_BASE<cat::array<CS,D>,cat::array<CS,D> >::inverse_plan;
+	using FFT_BASE<cat::array<CS,D>,cat::array<CS,D> >::realsize;
+	using FFT_BASE<cat::array<CS,D>,cat::array<CS,D> >::fouriersize;
+	using FFT_BASE<cat::array<CS,D>,cat::array<CS,D> >::plans_created;
+	void do_create_plans();
+};
+
+template <>
+	template <int D>
+	class FFT<cat::array<RS,D>,cat::array<CS,D> >: public FFT_BASE<cat::array<RS,D>,cat::array<CS,D> >
+{
+	using FFT_BASE<cat::array<RS,D>,cat::array<CS,D> >::realdata;
+	using FFT_BASE<cat::array<RS,D>,cat::array<CS,D> >::fourierdata;
+	using FFT_BASE<cat::array<RS,D>,cat::array<CS,D> >::direct_plan;
+	using FFT_BASE<cat::array<RS,D>,cat::array<CS,D> >::inverse_plan;
+	using FFT_BASE<cat::array<RS,D>,cat::array<CS,D> >::realsize;
+	using FFT_BASE<cat::array<RS,D>,cat::array<CS,D> >::fouriersize;
+	using FFT_BASE<cat::array<RS,D>,cat::array<CS,D> >::plans_created;
+	void do_create_plans();
+ };
+
+
+template <>
+	template <int D>
+	class FFT<cat::array<RS,D>,cat::array<RS,D> >: public FFT_BASE<cat::array<RS,D>,cat::array<RS,D> >
+{
+	using FFT_BASE<cat::array<RS,D>,cat::array<RS,D> >::realdata;
+	using FFT_BASE<cat::array<RS,D>,cat::array<RS,D> >::fourierdata;
+	using FFT_BASE<cat::array<RS,D>,cat::array<RS,D> >::direct_plan;
+	using FFT_BASE<cat::array<RS,D>,cat::array<RS,D> >::inverse_plan;
+	using FFT_BASE<cat::array<RS,D>,cat::array<RS,D> >::realsize;
+	using FFT_BASE<cat::array<RS,D>,cat::array<RS,D> >::fouriersize;
+	using FFT_BASE<cat::array<RS,D>,cat::array<RS,D> >::plans_created;
+	void do_create_plans();
+	fftw_r2r_kind r2r_kind_direct;
+	fftw_r2r_kind r2r_kind_inverse;
+private:
+	FFT();
+public:
+	FFT(const string & subtype);
+};
 
 
 }

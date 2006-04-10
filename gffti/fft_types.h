@@ -31,15 +31,15 @@ template <class RealType,class FourierType>
 template <int D>
 	struct FFT_TYPES<cat::array<CS,D>,cat::array<CS,D> >
 {
-	typedef CS RDT;
-	typedef CS FDT;
+	typedef fftw_complex RDT;
+	typedef fftw_complex FDT;
 };
 //Vector Fields
 template <int D,int N>
 	struct FFT_TYPES<cat::array<cat::tvector<CS,N>,D>,cat::array<cat::tvector<CS,N>,D> >
 {
-	typedef CS RDT;
-	typedef CS FDT;
+	typedef fftw_complex RDT;
+	typedef fftw_complex FDT;
 };
 
 //Real to Complex / Complex to Real
@@ -48,14 +48,14 @@ template <int D>
 	struct FFT_TYPES<cat::array<RS,D>,cat::array<CS,D> >
 {
 	typedef RS RDT;
-	typedef CS FDT;
+	typedef fftw_complex FDT;
 };
 //Vector Fields
 template <int D,int N>
 	struct FFT_TYPES<cat::array<cat::tvector<RS,N>,D>,cat::array<cat::tvector<CS,N>,D> >
 {
 	typedef RS RDT;
-	typedef CS FDT;
+	typedef fftw_complex FDT;
 };
 
 //Real to Real
