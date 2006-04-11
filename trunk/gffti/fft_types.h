@@ -8,16 +8,14 @@
 ///////////////////////////////////////////////////
 #ifndef FFT_TYPES_H
 #define FFT_TYPES_H
-
+// namespace goops
+// {
 
 #include <cat.h>
 
 #include <complex>
 
 #include <fftw3.h>
-
-namespace goops
-{
 
 typedef double RS;
 typedef std::complex<RS> CS;
@@ -74,7 +72,7 @@ template <int D,int N>
 	typedef RS FDT;
 };
 
-}
+//}
 
 #endif
 

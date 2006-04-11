@@ -2,6 +2,9 @@
 // Real TO COMPLEX TRANSFORM FOR VECTOR FIELDS //
 /////////////////////////////////////////////////
 
+// namespace goops
+// {
+
 #include "v_rfft_h_z_ssc.h"
 
 #include <cat.h>
@@ -59,3 +62,4 @@ void v_rfft_h_z_ssc::inverse_transform(VRT& u,const VCT& u_hat)
     (u.data()[i])[2]=s_u.data()[i];  
 }
 
+//}
