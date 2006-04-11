@@ -1,8 +1,14 @@
 
-#include <fftw3.h>
 
-namespace goops
-{
+
+// namespace goops
+// {
+
+// #include <fftw3.h>
+// 
+// #include <cmath>
+
+using namespace std;
 
 //Generic Ctor
 template <class RealType,class FourierType>
@@ -10,6 +16,7 @@ FFT_BASE<RealType,FourierType>::FFT_BASE()
 {
 	realdata=0;
 	fourierdata=0;
+	plans_created=0;
 }
 
 //Generic Dtor
@@ -122,26 +129,45 @@ template <>
 	template <int D>
 	void FFT<cat::array<RS,D>,cat::array<RS,D> >::do_create_plans()
 {
-	direct_plan=fftw_plan_r2r(D,&realsize,realdata-1,fourierdata,&r2r_kind_direct,FFTW_ESTIMATE);
-	inverse_plan=fftw_plan_r2r(D,&fouriersize,fourierdata,realdata+1,&r2r_kind_inverse,FFTW_ESTIMATE);
+	if (r2r_kind_direct==FFTW_RODFT00)
+	{
+		realsize-=2;
+		fouriersize-=2;
+		direct_plan=fftw_plan_r2r(D,&realsize,realdata+1,fourierdata+1,&r2r_kind_direct,FFTW_ESTIMATE);
+		inverse_plan=fftw_plan_r2r(D,&fouriersize,fourierdata+1,realdata+1,&r2r_kind_inverse,FFTW_ESTIMATE);
+	}
+	else
+	{
+	direct_plan=fftw_plan_r2r(D,&realsize,realdata,fourierdata,&r2r_kind_direct,FFTW_ESTIMATE);
+	inverse_plan=fftw_plan_r2r(D,&fouriersize,fourierdata,realdata,&r2r_kind_inverse,FFTW_ESTIMATE);
+	}
 }
 
-// template <>
-// 	template <int D>
-// 	void FFT<cat::array<RS,D>,cat::array<RS,D> >::direct_transform(FourierType & fourierfield,RealType & realfield)
-// {
-// 	switch_data(realfield,fourierfield);
-// 	fftw_execute(direct_plan);
-// 	fourierfield/=realsize;
-// }
-// template <>
-// 	template <int D>
-// 	void FFT<cat::array<RS,D>,cat::array<RS,D> >::inverse_transform(RealType & realfield,FourierType & fourierfield)
-// {
-// 	switch_data(realfield,fourierfield);
-// 	fftw_execute(direct_plan);
-// 	fourierfield/=realsize;
-// }
+template <>
+	template <int D>
+	void FFT<cat::array<RS,D>,cat::array<RS,D> >::direct_transform(cat::array<RS,D> & fourierfield,cat::array<RS,D> & realfield)
+{
+	switch_data(realfield,fourierfield);
+	fftw_execute(direct_plan);
+	if(r2r_kind_direct==FFTW_REDFT00)
+		fourierfield/=(realsize-1);
+	else
+		fourierfield/=(realsize-1);
+	fourierfield.data()[0]*=.5;
+}
+template <>
+	template <int D>
+	void FFT<cat::array<RS,D>,cat::array<RS,D> >::inverse_transform(cat::array<RS,D> & fourierfield,cat::array<RS,D> & realfield)
+{
+	switch_data(realfield,fourierfield);
+	fftw_execute(direct_plan);
+	fourierfield*=.5;
+	if (r2r_kind_direct==FFTW_RODFT00)
+	{
+	fourierfield.data()[0]=0;
+	fourierfield.data()[fouriersize+1]=0;
+	}
+}
 	
 
-}
+//}

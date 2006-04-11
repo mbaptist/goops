@@ -13,13 +13,13 @@
 #ifndef FFT_H
 #define FFT_H
 
-
+// namespace goops
+// {
 #include "fft_types.h"
 
 #include <fftw3.h>
 
-namespace goops
-{
+#include <cmath>
 
 template <class RealType,class FourierType>
 	class FFT_BASE
@@ -102,6 +102,7 @@ template <>
 	template <int D>
 	class FFT<cat::array<RS,D>,cat::array<RS,D> >: public FFT_BASE<cat::array<RS,D>,cat::array<RS,D> >
 {
+private:
 	using FFT_BASE<cat::array<RS,D>,cat::array<RS,D> >::realdata;
 	using FFT_BASE<cat::array<RS,D>,cat::array<RS,D> >::fourierdata;
 	using FFT_BASE<cat::array<RS,D>,cat::array<RS,D> >::direct_plan;
@@ -116,10 +117,12 @@ private:
 	FFT();
 public:
 	FFT(const string & subtype);
+	void direct_transform(cat::array<RS,D> & fourierfield,cat::array<RS,D> & realfield);
+	void inverse_transform(cat::array<RS,D> & realfield,cat::array<RS,D> & fourierfield);
 };
 
 
-}
+// }
 
 #include "fft.C"
 

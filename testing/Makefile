@@ -4,7 +4,7 @@
 # Manuel Baptista (2004) (2005)
 ########################################################################
 
-CXX = g++ -O3 -m32 -msse2 -mfpmath=sse
+CXX = g++ -g -O2
 
 INCLUDE = -I/home/mbaptist/work/codes/devel/cat -I..
 

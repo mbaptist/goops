@@ -1,10 +1,22 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="1" >
-  <Doc0 NumberOfViews="1" URL="file:///home/mbaptist/work/codes/devel/goops/goops.h" >
-   <View0 line="9" Type="Source" />
+ <DocsAndViews NumberOfDocuments="5" >
+  <Doc0 NumberOfViews="1" URL="file:///home/mbaptist/work/codes/devel/goops/gffti/fft.h" >
+   <View0 line="118" Type="Source" />
   </Doc0>
+  <Doc1 NumberOfViews="1" URL="file:///home/mbaptist/work/codes/devel/goops/gffti/fft_types.h" >
+   <View0 line="66" Type="Source" />
+  </Doc1>
+  <Doc2 NumberOfViews="1" URL="file:///home/mbaptist/work/codes/devel/goops/gffti/testgffti.C" >
+   <View0 line="127" Type="Source" />
+  </Doc2>
+  <Doc3 NumberOfViews="1" URL="file:///home/mbaptist/work/codes/devel/goops/gffti/fft.C" >
+   <View0 line="139" Type="Source" />
+  </Doc3>
+  <Doc4 NumberOfViews="1" URL="file:///home/mbaptist/work/codes/devel/goops/gffti/s_cosfft_1d.C" >
+   <View0 line="57" Type="Source" />
+  </Doc4>
  </DocsAndViews>
  <pluginList>
   <kdevdebugger>
@@ -13,6 +25,9 @@
   <kdevbookmarks>
    <bookmarks/>
   </kdevbookmarks>
+  <kdevsubversion>
+   <subversion recurseresolve="1" recurserelocate="1" recursemerge="1" recursecommit="1" base="" recursepropget="1" recurseswitch="1" recurseupdate="1" recursepropset="1" recursediff="1" recurserevert="1" forcemove="1" recursecheckout="1" forceremove="1" recurseadd="1" recurseproplist="1" forcemerge="1" />
+  </kdevsubversion>
   <kdevvalgrind>
    <executable path="" params="" />
    <valgrind path="" params="" />

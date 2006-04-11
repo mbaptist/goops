@@ -1,0 +1,8 @@
+The change in implementation and interface is being done by parts:
+
+  1) merge all homogeneous scalar ffts and express the homogeneous vector ffts using the new scalar ffts
+  2) merge homogeneous vector ffts, using the advanced interface,  and express heterogeneous ffts in terms of this new implementation
+  3) possibly use guru interface for heterogeneous ffts
+
+Unused files will be moved here and the whole directory will be removed in the end. This allows for changes to be recorded in he svn repo
+

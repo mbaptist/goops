@@ -12,8 +12,7 @@ LIB = -lpthread
 ########################################################################
 
 GFFTI_OBJECTS = \
-	./gffti/s_sinfft_1d.o \
-	./gffti/s_cosfft_1d.o \
+  ./gffti/s_rfft_h_z.o \
 	./gffti/v_rfft_h_z_ssc.o \
 	./gffti/v_rfft_h_z_ccs.o
 

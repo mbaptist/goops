@@ -8,6 +8,9 @@
 #ifndef V_RFFT_H_Z_SSC_H
 #define V_RFFT_H_Z_SSC_H
 
+// namespace goops
+// {
+
 #include <complex>
 using std::complex;
 
@@ -15,8 +18,7 @@ using std::complex;
 
 #include <cat.h>
 
-#include "s_cosfft_1d.h"
-#include "s_sinfft_1d.h"
+#include "fft.h"
 #include "s_rfft_h_z.h"
 
 
@@ -34,18 +36,18 @@ class v_rfft_h_z_ssc
  public:
   //Constructor
   v_rfft_h_z_ssc(cat::tvector<int,3> size_):
-    s_rfft_cos_obj(size_),
-    s_rfft_sin_obj(size_){};
+    s_rfft_cos_obj("cos"),
+    s_rfft_sin_obj("sin"){};
   //Destructor
   ~v_rfft_h_z_ssc(){};
   //Transformation functions for vectors
   void direct_transform(VCT& u_hat,const VRT& u);
   void inverse_transform(VRT& u,const VCT& u_hat);  
  private:
-  s_rfft_h_z<s_cosfft_1d> s_rfft_cos_obj;
-  s_rfft_h_z<s_sinfft_1d> s_rfft_sin_obj;
+  s_rfft_h_z s_rfft_cos_obj;
+  s_rfft_h_z s_rfft_sin_obj;
 };
 
-
+//}
 
 #endif
