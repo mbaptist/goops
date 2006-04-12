@@ -12,7 +12,7 @@ using std::complex;
 
 #include <fftw3.h>
 
-#include "s_rfft.h"
+#include "fft.h"
 
 #include <cat.h>
 using namespace cat;
@@ -32,7 +32,7 @@ class v_rfft
   typedef cat::array<cat::tvector<complex<Real>,N>,D> VCT;
  public:
   //Constructor
-  v_rfft(const cat::tvector<int,D> & size_):s_rfft_obj(size_){};
+  v_rfft(const cat::tvector<int,D> & size_):s_rfft_obj(){};
   //Destructor
   ~v_rfft(){};
   //Transformation functions for vectors
@@ -40,7 +40,7 @@ class v_rfft
   void inverse_transform(VRT& u,const VCT& u_hat);  
 
  private:
-  s_rfft<D> s_rfft_obj;
+FFT<cat::array<double,D>,cat::array<complex<double>,D> > s_rfft_obj;
 
 };
 

@@ -34,7 +34,7 @@ spectral_fourier::spectral_fourier(const int & n1__,
   dealiasing_limit(0),
   dealiasing_mask(n1,n2,n3/2+1),
   fft(cat::tvector<int,3>(n1,n2,n3)),
-  sfft(cat::tvector<int,3>(n1,n2,n3))
+  sfft()
 {
 
   //define aspect ratios

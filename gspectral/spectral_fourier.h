@@ -30,7 +30,7 @@ private:
 public:
   //Object to perform ffts
   v_rfft<3,3> fft;
-  s_rfft<3> sfft;
+  FFT<RSF,CSF> sfft;
   
         
   //Constructor and destructor

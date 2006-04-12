@@ -31,8 +31,8 @@ public:
   //Object to perform ffts
   v_rfft_h_z_ccs fft_ccs;
   v_rfft_h_z_ssc fft_ssc;
-  s_rfft_h_z<s_sinfft_1d> sfft_s;
-  s_rfft_h_z<s_cosfft_1d> sfft_c;
+  s_rfft_h_z sfft_s;
+  s_rfft_h_z sfft_c;
   
         
   //Constructor and destructor

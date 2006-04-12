@@ -35,8 +35,8 @@ spectral_fourier_layer::spectral_fourier_layer(const int & n1__,
   dealiasing_mask(n1,n2/2+1,n3),
   fft_ccs(cat::tvector<int,3>(n1,n2,n3)),
   fft_ssc(cat::tvector<int,3>(n1,n2,n3)),
-  sfft_s(cat::tvector<int,3>(n1,n2,n3)),
-  sfft_c(cat::tvector<int,3>(n1,n2,n3))
+  sfft_s("sin"),
+sfft_c("cos")
 {
 
   //define aspect ratios

@@ -163,12 +163,12 @@ template <>
 	void FFT<cat::array<RS,D>,cat::array<RS,D> >::inverse_transform(cat::array<RS,D> & realfield,const cat::array<RS,D> & fourierfield)
 {
 	switch_data(realfield,*const_cast<cat::array<RS,D>*>(&fourierfield));
-	fftw_execute(inverse_plan);
-	realfield*=.5;
+	fftw_execute(direct_plan);
+	fourierfield*=.5;
 	if (r2r_kind_direct==FFTW_RODFT00)
 	{
-	realfield.data()[0]=0;
-	realfield.data()[fouriersize+1]=0;
+	fourierfield.data()[0]=0;
+	fourierfield.data()[fouriersize+1]=0;
 	}
 }
 	
