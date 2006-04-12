@@ -5,7 +5,8 @@
 /////////////////////////////////////////////////////////////////////////
 // namespace goops
 // {
-
+#include "s_rfft_h_z.h"
+#include "../goops_types.h"
 #include "fft.h"
 
 #include <cat.h>
@@ -22,7 +23,6 @@ using namespace std;
 
   //Constructor
 s_rfft_h_z::s_rfft_h_z(std::string subtype):
-size(size_),
 	s_rfft_obj(),
 	fftz_obj(subtype)
 {
@@ -34,6 +34,9 @@ s_rfft_h_z::~s_rfft_h_z()
 
 void s_rfft_h_z::direct_transform(CT3& u_hat,const RT3& u)
 {
+
+	cat::tvector<int,3> size(u.shape());
+	
   //Copies u to a working array
 	RT3 work(u);
   //Transform along z
@@ -79,6 +82,7 @@ void s_rfft_h_z::direct_transform(CT3& u_hat,const RT3& u)
 
 void s_rfft_h_z::inverse_transform(RT3& u,const CT3& u_hat)
 {  
+	cat::tvector<int,3> size(u.shape());
 	
   //Creates a working array from u
 	RT3 work(u.shape());
@@ -115,4 +119,3 @@ void s_rfft_h_z::inverse_transform(RT3& u,const CT3& u_hat)
 
 //}
 
-#endif

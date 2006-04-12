@@ -15,6 +15,8 @@
 //transforms
 #include "fft.h"
 
+#include "v_rfft.h"
+
 //scalar real/complex transforms, heterogeneous along z
 //Only defined for D=3
 //in x,y s_rfft is used, in z sin or cos is used according

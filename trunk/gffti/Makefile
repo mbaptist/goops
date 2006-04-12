@@ -4,13 +4,13 @@
 # Manuel Baptista (2004) (2005)
 ########################################################################
 
-CXX = g++ -g -O2
+CXX = g++ -O3 -m32 -msse2 -mfpmath=sse -g
 
 ########################################################################
 
 INCLUDE = -I/home/mbaptist/work/codes/devel/cat 
 
-OBJECTS = v_rfft_h_z_ssc.o v_rfft_h_z_ccs.o
+OBJECTS = s_rfft_h_z.o v_rfft_h_z_ssc.o v_rfft_h_z_ccs.o
 
 ########################################################################
 

@@ -7,11 +7,13 @@
 #ifndef S_RFFT_H_Z_H
 #define S_RFFT_H_Z_H
 
+
+
 // namespace goops
 // {
 
 #include "fft.h"
-
+#include "../goops_types.h"
 #include <cat.h>
 
 #include <string>
@@ -22,7 +24,7 @@ using namespace cat;
 //DECLARATION
 class s_rfft_h_z
 {
-private:  
+private:
 //Types for scalar fields
   typedef cat::array<Real,1> RT;
   typedef cat::array<complex<Real>,1> CT; 
@@ -38,9 +40,9 @@ public:
   void direct_transform(CT3& u_hat,const RT3& u);
   void inverse_transform(RT3& u,const CT3& u_hat);
 private:
-  cat::tvector <int,3> size;
+	//cat::tvector <int,3> size;
 	FFT<cat::array<double,2>, cat::array<complex<double>,2> > s_rfft_obj;
-	FFT<cat::array<double,2>, cat::array<double,2> > fftz_obj;
+	FFT<cat::array<double,1>, cat::array<double,1> > fftz_obj;
 };
 
 //}

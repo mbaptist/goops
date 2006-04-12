@@ -10,8 +10,8 @@
 //
 //
 
-#ifndef FFT_H
-#define FFT_H
+#ifndef PLAN_H
+#define PLAN_H
 
 // namespace goops
 // {
@@ -21,16 +21,16 @@
 
 #include <cmath>
 
-template <class RealType,class FourierType>
+template <class TypeIn,class TypeOut>
 	class FFT_BASE
 {
 protected:
 	//Types
-	typedef typename FFT_TYPES<RealType,FourierType>::RDT RDT;
+	typedef typename FFT_TYPES<RealType>::RDT RDT;
 	typedef typename FFT_TYPES<RealType,FourierType>::FDT FDT;
 	//Members
-	RDT * realdata;
-	FDT * fourierdata;
+	TypeInElement * datain;
+	TypeOutElement * dataout;
 	Plan direct_plan;
 	Plan inverse_plan;
 	//Size
@@ -117,8 +117,8 @@ private:
 	FFT();
 public:
 	FFT(const string & subtype);
-	void direct_transform(cat::array<RS,D> & fourierfield,const cat::array<RS,D> & realfield);
-	void inverse_transform(cat::array<RS,D> & realfield,const cat::array<RS,D> & fourierfield);
+	void direct_transform(cat::array<RS,D> & fourierfield, const cat::array<RS,D> & realfield);
+	void inverse_transform(cat::array<RS,D> & realfield, const cat::array<RS,D> & fourierfield);
 };
 
 
