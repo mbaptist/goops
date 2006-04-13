@@ -16,7 +16,8 @@ void v_rfft_h_z_ccs::direct_transform(VCT& u_hat,const VRT& u)
 {
   //First two components use cos along z
 	for(int comp=0;comp<2;++comp)
-	{
+	{				
+		
 		RT s_u(u.shape());
 		CT s_u_hat(u_hat.shape());
 		
