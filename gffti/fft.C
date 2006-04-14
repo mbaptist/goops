@@ -63,7 +63,9 @@ void FFT_BASE<RealType,FourierType>::inverse_transform(RealType & realfield,cons
 {
 	switch_data(realfield,*const_cast<FourierType*>(&fourierfield));
 	fftw_execute(inverse_plan);
-	realfield/=fouriersize;
+	cout << sum(realfield) << endl;
+	exit(0);
+	//realfield/=fouriersize;
 }
 
 //Generic switch data
@@ -77,11 +79,22 @@ void FFT_BASE<RealType,FourierType>::switch_data(RealType & realfield,FourierTyp
 		destroy_plans();
 		realdata=realfield_ptr;
 		fourierdata=fourierfield_ptr;
-		realsize=realfield.size();
-		fouriersize=fourierfield.size();
+		realshape=realfield.shape().data();
+		realsize=evalsize(realshape);
+		fouriershape=fourierfield.shape().data();
+		fouriersize=evalsize(fouriershape);
 		create_plans();
 	}
 }
+template <class RealType,class FourierType>
+int FFT_BASE<RealType,FourierType>::evalsize(int * shape)
+{
+	int size=1;	
+	for (int i=0;i<DIM;++i)
+		size*=shape[i];
+	return size;
+}
+
 
 //Specialization
 
@@ -90,8 +103,8 @@ template <>
 	template <int D>
 	void FFT<cat::array<CS,D>,cat::array<CS,D> >::do_create_plans()
 {
-	direct_plan=fftw_plan_dft(D,&realsize,realdata,fourierdata,FFTW_FORWARD,FFTW_ESTIMATE);
-	inverse_plan=fftw_plan_dft(D,&fouriersize,fourierdata,realdata,FFTW_FORWARD,FFTW_ESTIMATE);
+	direct_plan=fftw_plan_dft(D,realshape,realdata,fourierdata,FFTW_FORWARD,FFTW_ESTIMATE);
+	inverse_plan=fftw_plan_dft(D,&fouriershape,fourierdata,realdata,FFTW_FORWARD,FFTW_ESTIMATE);
 }
 
 
@@ -99,8 +112,8 @@ template <>
 	template <int D>
 	void FFT<cat::array<RS,D>,cat::array<CS,D> >::do_create_plans()
 {
-	direct_plan=fftw_plan_dft_r2c(D,&realsize,realdata,fourierdata,FFTW_ESTIMATE);
-	inverse_plan=fftw_plan_dft_c2r(D,&fouriersize,fourierdata,realdata,FFTW_ESTIMATE);
+	direct_plan=fftw_plan_dft_r2c(D,realshape,realdata,fourierdata,FFTW_ESTIMATE);
+	inverse_plan=fftw_plan_dft_c2r(D,fouriershape,fourierdata,realdata,FFTW_ESTIMATE);
 }
 
 
@@ -134,6 +147,11 @@ template <>
 {
 	if (r2r_kind_direct==FFTW_RODFT00)
 	{
+// 		for (int i=0;i<DIM;++i)
+// 		{
+// 			realshape[i]-=2;
+// 			fouriershape[i]-=2;
+// 		}
 		realsize-=2;
 		fouriersize-=2;
 		direct_plan=fftw_plan_r2r(D,&realsize,realdata+1,fourierdata+1,&r2r_kind_direct,FFTW_ESTIMATE);
@@ -141,8 +159,8 @@ template <>
 	}
 	else
 	{
-	direct_plan=fftw_plan_r2r(D,&realsize,realdata,fourierdata,&r2r_kind_direct,FFTW_ESTIMATE);
-	inverse_plan=fftw_plan_r2r(D,&fouriersize,fourierdata,realdata,&r2r_kind_inverse,FFTW_ESTIMATE);
+	direct_plan=fftw_plan_r2r(D,realshape,realdata,fourierdata,&r2r_kind_direct,FFTW_ESTIMATE);
+	inverse_plan=fftw_plan_r2r(D,fouriershape,fourierdata,realdata,&r2r_kind_inverse,FFTW_ESTIMATE);
 	}
 }
 

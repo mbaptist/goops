@@ -48,7 +48,7 @@ void v_rfft_h_z_ccs::inverse_transform(VRT& u,const VCT& u_hat)
 		RT s_u(u.shape());
 		CT s_u_hat(u_hat.shape());
 		for(int i=0;i<s_u_hat.size();++i)
-			s_u_hat.data()[i]=(u_hat.data()[i])[comp];
+			s_u_hat.data()[i]=(u_hat.data()[i])[comp];		
 		s_rfft_cos_obj.inverse_transform(s_u,s_u_hat);
 		for(int i=0;i<s_u.size();++i)
 			(u.data()[i])[comp]=s_u.data()[i];
