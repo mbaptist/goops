@@ -86,6 +86,8 @@ void s_rfft_h_z::inverse_transform(RT3& u,const CT3& u_hat)
 	
   //Creates a working array from u
 	RT3 work(u.shape());
+
+
 	
   //Transform along x and y
 	for (int k=0;k<size[2];++k)

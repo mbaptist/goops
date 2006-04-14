@@ -22,31 +22,32 @@
 #include <cmath>
 
 template <class TypeIn,class TypeOut>
-	class FFT_BASE
+	class PLAN_BASE
 {
 protected:
 	//Types
-	typedef typename FFT_TYPES<RealType>::RDT RDT;
-	typedef typename FFT_TYPES<RealType,FourierType>::FDT FDT;
+	typedef typename FFT_TYPES<RealType>::RDT IDT;
+	typedef typename FFT_TYPES<RealType,FourierType>::FDT ODT;
 	//Members
 	TypeInElement * datain;
 	TypeOutElement * dataout;
-	Plan direct_plan;
-	Plan inverse_plan;
+	Plan plan;
 	//Size
 	int realsize;
 	int fouriersize;
-	bool plans_created;
+	int * realshape_ptr;
+	int * fouriershapr_ptr;
+	bool plan_exists;
 	
 protected:
 	//Ctors
-	FFT_BASE();//Default Ctor
+	PLAN_BASE();//Default Ctor
 	//Dtor
-	~FFT_BASE();
+	~PLAN_BASE();
 	
 private:
 	//Forbidden Ctors
-	FFT_BASE(const FFT_BASE &);//Copy ctor
+	PLAN_BASE(const PLAN_BASE &);//Copy ctor
 	
 protected:
 	//Private methods
@@ -57,10 +58,8 @@ protected:
 	
 public:
 	//Public methods
-	void direct_transform(FourierType & fourierfield,const RealType & realfield);
-	void inverse_transform(RealType & realfield,const FourierType & fourierfield);
-	//FourierType direct_transform(const RealType & realfield);
-	//RealType inverse_transform(const FourierType & fourierfield);
+	void switch_data(RealType & realfield,FourierType & fourierfield);
+	void execute();
 };
 
 
