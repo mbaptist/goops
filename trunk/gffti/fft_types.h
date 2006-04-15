@@ -19,7 +19,7 @@
 
 typedef double RS;
 typedef std::complex<RS> CS;
-typedef fftw_plan Plan;
+typedef fftw_plan fftwPlan;
 
 template <class RealType,class FourierType>
 	struct FFT_TYPES;
