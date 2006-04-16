@@ -21,87 +21,114 @@
 
 #include <cmath>
 
+//Class PlanBase
 template <class TypeOut,class TypeIn>
 	class PlanBase
 {
 protected:
 	//Types
-	typedef typename FFT_TYPES<TypeIn>::TypeElement TypeInElement;
-	typedef typename FFT_TYPES<TypeOut>::TypeElement TypeOutElement;
+	typedef typename fftTypes<TypeIn>::fftNumericType fftTypeIn;
+	typedef typename fftTypes<TypeOut>::fftNumericType fftTypeOut;
 	//Members
-	TypeInElement * datain;
-	TypeOutElement * dataout;
-	fftwPlan plan;
-	//Size
-	int datainsize;
-	int dataoutsize;
-	int * datainshape;
+	//output data
+	fftTypeOut * dataout;
 	int * dataoutshape;
-	bool plan_exists;
-	
+	int dataoutsize;
+	//input data
+	fftTypeIn * datain;
+	int * datainshape;
+	int datainsize;
+	//plan variables
+	bool plan_exists;//Plan existence flag
+	fftPlan plan;//Plan variable
 protected:
 	//Ctors
 	PlanBase();//Default Ctor
 	//Dtor
-	~PlanBase();
-	
+	virtual ~PlanBase();
 private:
 	//Forbidden Ctors
 	PlanBase(const PlanBase &);//Copy ctor
-	
 protected:
 	//Private methods
 	void create_plan();
-	virtual void do_create_plans()=0;
-	void destroy_plans();
-	void switch_data(RealType & realfield,FourierType & fourierfield);
-	
+	virtual void do_create_plan()=0;
+	void destroy_plan();
 public:
 	//Public methods
-	void switch_data(RealType & realfield,FourierType & fourierfield);
+	void switch_data(TypeOut & fieldout,TypeIn & fieldin);
 	void execute();
 };
 
-
-template <class RealType,class FourierType>
-	class Plan: public FFT_BASE<RealType,FourierType>
+//Generic class Plan (inherits from class PlanBase)
+template <class TypeOut,class TypeIn>
+	class Plan: public PlanBase<TypeOut,TypeIn>
 {
 };
 
+//Specialisations of class Plan
+
+//Complex to Complex transforms (both directions)
 template <>
 	template <int D>
-	class FFT<cat::array<CS,D>,cat::array<CS,D> >: public FFT_BASE<cat::array<CS,D>,cat::array<CS,D> >
+	class Plan<cat::array<CS,D>,cat::array<CS,D> >: public PlanBase<cat::array<CS,D>,cat::array<CS,D> >
 {
-	void do_create_plans();
+	using PlanBase<cat::array<CS,D>,cat::array<CS,D> >;
+	int fftdirection;
+public:
+	Plan(string direction);	
+private:
+	Plan();//Forbids default ctor, since the direction of the transform must be specified
+	void do_create_plan();
 };
 
+//Real to Complex transforms (direct transform)
+template <>
+template <int D>
+class Plan<cat::array<CS,D>,cat::array<RS,D> >: public PlanBase<cat::array<CS,D>,cat::array<RS,D> >
+{
+private:
+	using PlanBase<cat::array<CS,D>,cat::array<RS,D> >;
+	void do_create_plan();
+};
+
+//Complex to Real transforms (inverse transform)
 template <>
 	template <int D>
-	class FFT<cat::array<RS,D>,cat::array<CS,D> >: public FFT_BASE<cat::array<RS,D>,cat::array<CS,D> >
+	class Plan<cat::array<RS,D>,cat::array<CS,D> >: public PlanBase<cat::array<RS,D>,cat::array<CS,D> >
 {
-	using FFT_BASE<cat::array<RS,D>,cat::array<CS,D> >::realdata;
-	void do_create_plans();
+private:
+	typedef PlanBase<cat::array<RS,D>,cat::array<CS,D> > BaseClass;
+	using BaseClass::realdata;
+	void do_create_plan();
  };
 
-
+//1D Real to Real transforms (both directions for sine and co-sine transforms)
 template <>
-	template <int D>
-	class FFT<cat::array<RS,D>,cat::array<RS,D> >: public FFT_BASE<cat::array<RS,D>,cat::array<RS,D> >
+	class Plan<cat::array<RS,1>,cat::array<RS,1> >: public PlanBase<cat::array<RS,1>,cat::array<RS,1> >
 {
 private:
-	using FFT_BASE<cat::array<RS,D>,cat::array<RS,D> >::realdata;
-	void do_create_plans();
-	fftw_r2r_kind r2r_kind_direct;
-	fftw_r2r_kind r2r_kind_inverse;
-private:
-	FFT();
+	using PlanBase<cat::array<RS,1>,cat::array<RS,1> >;
+	const string subtype;
+	const string direction;
+	fftw_r2r_kind r2r_kind;
+	fftTypeIn r2r_datain;
+	fftTypeOut r2r_dataout;
+	int r2r_size;
+	RS normfactor;
+	RS normfactor_zero;
 public:
-	FFT(const string & subtype);
+	Plan(const string & subtype__,const string & direction__);
+private:
+	Plan();
+	void do_create_plan();
+	void switch_data();
+	void normalise();
 };
 
 
 // }
 
-#include "fft.C"
+#include "plan.C"
 
 #endif
