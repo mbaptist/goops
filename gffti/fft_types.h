@@ -19,57 +19,51 @@
 
 typedef double RS;
 typedef std::complex<RS> CS;
-typedef fftw_plan fftwPlan;
+typedef fftw_plan fftPlan;
 
-template <class RealType,class FourierType>
-	struct FFT_TYPES;
+template <class Type>
+struct fftTypes;
 
-//Complex to Complex
-//Scalars Fields
+//Complex Scalars Fields
 template <int D>
-	struct FFT_TYPES<cat::array<CS,D>,cat::array<CS,D> >
+struct fftTypes<cat::array<CS,D> >
 {
-	typedef fftw_complex RDT;
-	typedef fftw_complex FDT;
-};
-//Vector Fields
-template <int D,int N>
-	struct FFT_TYPES<cat::array<cat::tvector<CS,N>,D>,cat::array<cat::tvector<CS,N>,D> >
-{
-	typedef fftw_complex RDT;
-	typedef fftw_complex FDT;
+	typedef CS NumericType;
+	typedef CS ElementType;
+	static const int Rank=D; 
+	typedef fftw_complex fftNumericType;
 };
 
-//Real to Complex / Complex to Real
-//Scalars Fields
-template <int D>
-	struct FFT_TYPES<cat::array<RS,D>,cat::array<CS,D> >
-{
-	typedef RS RDT;
-	typedef fftw_complex FDT;
-};
-//Vector Fields
+//Complex Vector Fields
 template <int D,int N>
-	struct FFT_TYPES<cat::array<cat::tvector<RS,N>,D>,cat::array<cat::tvector<CS,N>,D> >
+	struct fftTypes<cat::array<cat::tvector<CS,N>,D> >
 {
-	typedef RS RDT;
-	typedef fftw_complex FDT;
+	typedef CS NumericType;
+	typedef cat::tvector<CS,N> ElementType;
+	static const int Rank=D;
+	static const int VectorRank=N;
+	typedef fftw_complex fftNumericType;
 };
 
-//Real to Real
-//Scalars Fields
+//Real Scalars Fields
 template <int D>
-	struct FFT_TYPES<cat::array<RS,D>,cat::array<RS,D> >
+struct fftTypes<cat::array<RS,D> >
 {
-	typedef RS RDT;
-	typedef RS FDT;
+	typedef RS NumericType;
+	typedef RS ElementType;
+	static const int Rank=D;
+	typedef RS fftNumericType;
 };
-//Vector Fields
+
+//Real Vector Fields
 template <int D,int N>
-	struct FFT_TYPES<cat::array<cat::tvector<RS,N>,D>,cat::array<cat::tvector<RS,N>,D> >
+struct fftTypes<cat::array<cat::tvector<RS,N>,D> >
 {
-	typedef RS RDT;
-	typedef RS FDT;
+	typedef RS NumericType;
+	typedef cat::tvector<RS,N> ElementType;
+	static const int Rank=D;
+	static const int VectorRank=N;
+	typedef RS fftNumericType;
 };
 
 //}
