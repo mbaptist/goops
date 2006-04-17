@@ -194,13 +194,11 @@ void Plan<cat::array<RS,1>,const cat::array<RS,1> >::switch_data(cat::array<RS,1
 			r2r_size=datainsize;
 			if (direction=="direct"||direction=="forward")
 			{
-				transparcel=0	;			
 				normfactor=1./(datainsize-1);
 				normfactor_zero=.5;
 			}
 			else if(direction=="inverse"||direction=="backward")
-			{
-				transparcel=0	;			
+			{			
 				normfactor=.5;
 				normfactor_zero=1.;
 			}
