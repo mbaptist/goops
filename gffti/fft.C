@@ -69,7 +69,8 @@ void FFT<cat::array<RS,1>,cat::array<RS,1> >::direct_transform(cat::array<RS,1> 
 {
 	direct_plan.switch_data(fourierfield,realfield);
 	direct_plan.execute();
-	direct_plan.normalise();
+	//fourierfield/=(realfield.size()-1);
+	direct_plan.normalise();;
 }
 
 //1D Real to Real inverse transform
