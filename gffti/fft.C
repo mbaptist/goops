@@ -8,25 +8,15 @@
 // 
 // #include <cmath>
 
+#include "plan.h"
+
 using namespace std;
 
 //Generic Ctors
 template <class RealType,class FourierType>
-FFT_BASE<RealType,FourierType>::FFT():
+FFT<RealType,FourierType>::FFT():
 direct_plan(),
 inverse_plan()
-{
-}
-template <class RealType,class FourierType>
-FFT_BASE<RealType,FourierType>::FFT(const string & direction):
-direct_plan(direction),
-inverse_plan(direction)
-{
-}
-template <class RealType,class FourierType>
-FFT_BASE<RealType,FourierType>::FFT(const string & subtype,const string & direction):
-direct_plan(subtype,direction),
-inverse_plan(subtype,direction)
 {
 }
 
@@ -56,18 +46,20 @@ void FFT<RealType,FourierType>::inverse_transform(RealType & realfield,const Fou
 
 ///////////////////////////////
 
-//Complex to Complex Ctor
-template <>
-template<int D>
-FFT<cat::array<CS,D>,cat::array<CS,D> >::FFT(const string & direction):
-FFT_BASE(direction)
-{
-}
+// //Complex to Complex Ctor
+// template <>
+// template<int D>
+// FFT<cat::array<CS,D>,cat::array<CS,D> >::FFT():
+// direct_plan("direct"),
+// inverse_plan("inverse")
+// {
+// }
 
 //1D Real to Real Ctor
 template <>
-FFT<cat::array<RS,1>,cat::array<RS,1> >::FFT(const string & subtype,const string & direction):
-FFT_BASE(const string & subtype,const string & direction)
+FFT<cat::array<RS,1>,cat::array<RS,1> >::FFT(const string & subtype):
+direct_plan(subtype,"direct"),
+inverse_plan(subtype,"inverse")
 {
 }
 
@@ -75,7 +67,7 @@ FFT_BASE(const string & subtype,const string & direction)
 template <>
 void FFT<cat::array<RS,1>,cat::array<RS,1> >::direct_transform(cat::array<RS,1> & fourierfield, const cat::array<RS,1> & realfield)
 {
-	direct_plan.switch_data(realfield,fourierfield);
+	direct_plan.switch_data(fourierfield,realfield);
 	direct_plan.execute();
 	direct_plan.normalise();
 }
