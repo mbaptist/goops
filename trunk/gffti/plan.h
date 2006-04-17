@@ -54,6 +54,7 @@ protected:
 	void create_plan();
 	virtual void do_create_plan()=0;
 	void destroy_plan();
+	int evalsize(int * shape,int rank);
 public:
 	//Public methods
 	void switch_data(TypeOut & fieldout,TypeIn & fieldin);
@@ -71,12 +72,20 @@ template <class TypeOut,class TypeIn>
 //Complex to Complex transforms (both directions)
 template <>
 	template <int D>
-	class Plan<cat::array<CS,D>,cat::array<CS,D> >: public PlanBase<cat::array<CS,D>,cat::array<CS,D> >
+	class Plan<cat::array<CS,D>,const cat::array<CS,D> >: public PlanBase<cat::array<CS,D>,const cat::array<CS,D> >
 {
-	using PlanBase<cat::array<CS,D>,cat::array<CS,D> >;
+	typedef PlanBase<cat::array<CS,D>,const cat::array<CS,D> > BaseClass;
+	using BaseClass::dataout;
+	using BaseClass::dataoutshape;
+	using BaseClass::dataoutsize;
+	using BaseClass::datain;
+	using BaseClass::datainshape;
+	using BaseClass::datainsize;
+	using BaseClass::plan_exists;
+	using BaseClass::plan;
 	int fftdirection;
 public:
-	Plan(string direction);	
+	Plan(const string & direction);	
 private:
 	Plan();//Forbids default ctor, since the direction of the transform must be specified
 	void do_create_plan();
@@ -85,35 +94,58 @@ private:
 //Real to Complex transforms (direct transform)
 template <>
 template <int D>
-class Plan<cat::array<CS,D>,cat::array<RS,D> >: public PlanBase<cat::array<CS,D>,cat::array<RS,D> >
+class Plan<cat::array<CS,D>,const cat::array<RS,D> >: public PlanBase<cat::array<CS,D>,const cat::array<RS,D> >
 {
 private:
-	using PlanBase<cat::array<CS,D>,cat::array<RS,D> >;
+	typedef PlanBase<cat::array<CS,D>,const cat::array<RS,D> > BaseClass;
+	using BaseClass::dataout;
+	using BaseClass::dataoutshape;
+	using BaseClass::dataoutsize;
+	using BaseClass::datain;
+	using BaseClass::datainshape;
+	using BaseClass::datainsize;
+	using BaseClass::plan_exists;
+	using BaseClass::plan;
 	void do_create_plan();
 };
 
 //Complex to Real transforms (inverse transform)
 template <>
 	template <int D>
-	class Plan<cat::array<RS,D>,cat::array<CS,D> >: public PlanBase<cat::array<RS,D>,cat::array<CS,D> >
+	class Plan<cat::array<RS,D>,const cat::array<CS,D> >: public PlanBase<cat::array<RS,D>,const cat::array<CS,D> >
 {
 private:
-	typedef PlanBase<cat::array<RS,D>,cat::array<CS,D> > BaseClass;
-	using BaseClass::realdata;
+	typedef PlanBase<cat::array<RS,D>,const cat::array<CS,D> > BaseClass;
+	using BaseClass::dataout;
+	using BaseClass::dataoutshape;
+	using BaseClass::dataoutsize;
+	using BaseClass::datain;
+	using BaseClass::datainshape;
+	using BaseClass::datainsize;
+	using BaseClass::plan_exists;
+	using BaseClass::plan;
 	void do_create_plan();
  };
 
 //1D Real to Real transforms (both directions for sine and co-sine transforms)
 template <>
-	class Plan<cat::array<RS,1>,cat::array<RS,1> >: public PlanBase<cat::array<RS,1>,cat::array<RS,1> >
+	class Plan<cat::array<RS,1>,const cat::array<RS,1> >: public PlanBase<cat::array<RS,1>,const cat::array<RS,1> >
 {
 private:
-	using PlanBase<cat::array<RS,1>,cat::array<RS,1> >;
+	typedef PlanBase<cat::array<RS,1>,const cat::array<RS,1> > BaseClass;
+	using BaseClass::dataout;
+	using BaseClass::dataoutshape;
+	using BaseClass::dataoutsize;
+	using BaseClass::datain;
+	using BaseClass::datainshape;
+	using BaseClass::datainsize;
+	using BaseClass::plan_exists;
+	using BaseClass::plan;
 	const string subtype;
 	const string direction;
 	fftw_r2r_kind r2r_kind;
-	fftTypeIn r2r_datain;
-	fftTypeOut r2r_dataout;
+	fftTypeIn * r2r_datain;
+	fftTypeOut * r2r_dataout;
 	int r2r_size;
 	RS normfactor;
 	RS normfactor_zero;
@@ -122,7 +154,8 @@ public:
 private:
 	Plan();
 	void do_create_plan();
-	void switch_data();
+public:
+	void switch_data(cat::array<RS,1> & fieldout,const cat::array<RS,1> & fieldin);
 	void normalise();
 };
 
@@ -132,3 +165,4 @@ private:
 #include "plan.C"
 
 #endif
+

@@ -21,8 +21,23 @@ typedef double RS;
 typedef std::complex<RS> CS;
 typedef fftw_plan fftPlan;
 
+//Generic definition
 template <class Type>
 struct fftTypes;
+
+//Specialization for constant types
+template <class Type>
+struct fftTypes<const Type>
+{
+	typedef  const typename fftTypes<Type>::NumericType NumericType;
+	typedef const typename fftTypes<Type>::ElementType ElementType;
+	static const int Rank=fftTypes<Type>::Rank;
+	static const int VectorRank=fftTypes<Type>::VectorRank;
+	typedef typename fftTypes<Type>::fftNumericType fftNumericType;
+};
+
+//Partial Specializations for non-constant types
+//Constant versions are automatically defined by the code above
 
 //Complex Scalars Fields
 template <int D>
@@ -30,7 +45,8 @@ struct fftTypes<cat::array<CS,D> >
 {
 	typedef CS NumericType;
 	typedef CS ElementType;
-	static const int Rank=D; 
+	static const int Rank=D;
+	static const int VectorRank=1;
 	typedef fftw_complex fftNumericType;
 };
 
@@ -52,6 +68,7 @@ struct fftTypes<cat::array<RS,D> >
 	typedef RS NumericType;
 	typedef RS ElementType;
 	static const int Rank=D;
+	static const int VectorRank=1;
 	typedef RS fftNumericType;
 };
 
@@ -102,3 +119,5 @@ typedef cat::array<RV,ArrayRank> RVF;//Real Vector Fields
 typedef cat::array<CV,ArrayRank> CVF;//Complex Vector Fields
 };
 #endif
+
+
