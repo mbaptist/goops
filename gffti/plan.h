@@ -83,9 +83,9 @@ template <>
 	using BaseClass::datainsize;
 	using BaseClass::plan_exists;
 	using BaseClass::plan;
-	int fftdirection;
+	const int direction;
 public:
-	Plan(const string & direction);	
+	Plan(const int & direction__);
 private:
 	Plan();//Forbids default ctor, since the direction of the transform must be specified
 	void do_create_plan();
@@ -141,22 +141,16 @@ private:
 	using BaseClass::datainsize;
 	using BaseClass::plan_exists;
 	using BaseClass::plan;
-	const string subtype;
-	const string direction;
 	fftw_r2r_kind r2r_kind;
-	fftTypeIn * r2r_datain;
-	fftTypeOut * r2r_dataout;
-	int r2r_size;
 	RS normfactor;
 	RS normfactor_zero;
 public:
-	Plan(const string & subtype__,const string & direction__);
+	Plan(const fftw_r2r_kind & r2r_kind__);
 private:
 	Plan();
 	void do_create_plan();
 public:
-	void switch_data(cat::array<RS,1> & fieldout,const cat::array<RS,1> & fieldin);
-	void normalise();
+	//void switch_data(cat::array<RS,1> & fieldout,const cat::array<RS,1> & fieldin);
 };
 
 

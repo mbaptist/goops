@@ -31,6 +31,7 @@ struct fftTypes<const Type>
 {
 	typedef  const typename fftTypes<Type>::NumericType NumericType;
 	typedef const typename fftTypes<Type>::ElementType ElementType;
+	typedef typename fftTypes<Type>::NumericType ccNumericType;
 	static const int Rank=fftTypes<Type>::Rank;
 	static const int VectorRank=fftTypes<Type>::VectorRank;
 	typedef typename fftTypes<Type>::fftNumericType fftNumericType;
