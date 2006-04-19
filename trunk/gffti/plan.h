@@ -32,11 +32,11 @@ protected:
 	//Members
 	//output data
 	fftTypeOut * dataout;
-	int * dataoutshape;
+	const int * dataoutshape;
 	int dataoutsize;
 	//input data
 	fftTypeIn * datain;
-	int * datainshape;
+	const int * datainshape;
 	int datainsize;
 	//plan variables
 	bool plan_exists;//Plan existence flag
@@ -54,7 +54,7 @@ protected:
 	void create_plan();
 	virtual void do_create_plan()=0;
 	void destroy_plan();
-	int evalsize(int * shape,int rank);
+	int evalsize(const int * shape,int rank);
 public:
 	//Public methods
 	void switch_data(TypeOut & fieldout,TypeIn & fieldin);
@@ -65,6 +65,16 @@ public:
 template <class TypeOut,class TypeIn>
 	class Plan: public PlanBase<TypeOut,TypeIn>
 {
+	typedef PlanBase<TypeOut,TypeIn> BaseClass;
+	using BaseClass::dataout;
+	using BaseClass::dataoutshape;
+	using BaseClass::dataoutsize;
+	using BaseClass::datain;
+	using BaseClass::datainshape;
+	using BaseClass::datainsize;
+	using BaseClass::plan_exists;
+	using BaseClass::plan;
+	Plan();
 };
 
 //Specialisations of class Plan
@@ -142,10 +152,9 @@ private:
 	using BaseClass::plan_exists;
 	using BaseClass::plan;
 	fftw_r2r_kind r2r_kind;
-	RS normfactor;
-	RS normfactor_zero;
 public:
 	Plan(const fftw_r2r_kind & r2r_kind__);
+	~Plan();
 private:
 	Plan();
 	void do_create_plan();

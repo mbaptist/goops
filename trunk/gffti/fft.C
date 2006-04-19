@@ -85,15 +85,34 @@ void FFT<cat::array<RS,1>,cat::array<RS,1> >::direct_transform(cat::array<RS,1> 
 {
 	if(subtype=="sin")
 	{
-		cat::array<RS,1> ff=cat::array<RS,1>(cat::tvector<int,1>(fourierfield.size()-2),fourierfield.data()+1);
-		const cat::array<RS,1> rf=cat::array<RS,1>(cat::tvector<int,1>(realfield.size()-2),const_cast<RS *>(realfield.data())+1);
+		//		cat::array<RS,1> ff=cat::array<RS,1>(cat::tvector<int,1>(fourierfield.size()-2),fourierfield.data()+1);
+		//  const cat::array<RS,1> rf=cat::array<RS,1>(cat::tvector<int,1>(realfield.size()-2),const_cast<RS *>(realfield.data())+1);
+		
+		size_t len=fourierfield.length()-2;
+		cat::array<RS,1> ff=cat::array<RS,1>(cat::tvector<int,1>(fourierfield.size()-2),fourierfield.ordering(),fourierfield.stride(),len,fourierfield.data()+1);
+		
+// 		array<T,D>::array(tvector<int,D> & shape__,
+// 		                  tvector<int,D> & ordering__,
+// 		                  tvector<int,D> & stride__,
+// 		                  size_t & length__,
+// 		                  T * data__):
+		
+		len=realfield.length()-2;
+		const cat::tvector<int,1> sha(realfield.size()-2);
+		const cat::tvector<int,1> ord(realfield.ordering());
+		cat::tvector<int,1> str(realfield.stride());
+		const RS * p = realfield.data()+1;
+		const cat::array<RS,1> rf(sha,ord,str,len,p);
+		
 		direct_plan.switch_data(ff,rf);
+		direct_plan.execute();
 		fourierfield(0)=0;
 		fourierfield(fourierfield.size()-1)=0;
 	}
 	else
 	{
-		inverse_plan.switch_data(fourierfield,realfield);
+		direct_plan.switch_data(fourierfield,realfield);
+		direct_plan.execute();
 		fourierfield(0)*=.5;
 	}
 	fourierfield/=(realfield.size()-1);
@@ -105,16 +124,38 @@ void FFT<cat::array<RS,1>,cat::array<RS,1> >::inverse_transform(cat::array<RS,1>
 {
 	if(subtype=="sin")
 	{
-		cat::array<RS,1> rf=cat::array<RS,1>(cat::tvector<int,1>(realfield.size()-2),realfield.data()+1);
-		const cat::array<RS,1> ff=cat::array<RS,1>(cat::tvector<int,1>(fourierfield.size()-2),const_cast<RS *>(fourierfield.data())+1);
+		//cat::array<RS,1> rf=cat::array<RS,1>(cat::tvector<int,1>(realfield.size()-2),realfield.data()+1);
+		size_t len=realfield.length()-2;
+			cat::array<RS,1> rf=cat::array<RS,1>(cat::tvector<int,1>(realfield.size()-2),realfield.ordering(),realfield.stride(),len,realfield.data());
+		
+// 		array<T,D>::array(tvector<int,D> & shape__,
+// 		                  tvector<int,D> & ordering__,
+// 		                  tvector<int,D> & stride__,
+// 		                  size_t & length__,
+// 		                  T * data__):
+
+		//const cat::array<RS,1> ff=cat::array<RS,1>(cat::tvector<int,1>(fourierfield.size()-2),const_cast<RS *>(fourierfield.data())+1);
+		
+		len=fourierfield.length()-2;
+		const cat::tvector<int,1> sha(fourierfield.size()-2);
+		const cat::tvector<int,1> ord(fourierfield.ordering());
+		cat::tvector<int,1> str(fourierfield.stride());
+		const RS * p = fourierfield.data();
+		const cat::array<RS,1> ff(sha,ord,str,len,p);
+		
+		//cout << fourierfield << "\n\n" << ff << endl;
+		cout << fourierfield.size() << endl;
 		inverse_plan.switch_data(rf,ff);
+		inverse_plan.execute();
+		cout << realfield << endl;
 		realfield(0)=0;
 		realfield(realfield.size()-1)=0;
 	}
 	else
 	{
 		inverse_plan.switch_data(realfield,fourierfield);
-		RS av=realfield(0);
+		inverse_plan.execute();
+		RS av=fourierfield(0);
 		realfield+=av;
 	}
 	realfield*=.5;

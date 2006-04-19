@@ -67,10 +67,10 @@ void PlanBase<TypeOut,TypeIn>::switch_data(TypeOut & fieldout,TypeIn & fieldin)
 		dataoutshape=fieldout.shape().data();
 		dataoutsize=evalsize(dataoutshape,fftTypes<TypeOut>::Rank);
 		datain=fieldin_ptr;
-		datainshape=const_cast<int *>(fieldin.shape().data());
+		datainshape=fieldin.shape().data();
 		datainsize=evalsize(datainshape,fftTypes<TypeIn>::Rank);
 
-		cout << datain[1] << endl;
+		//cout << datain[1] << endl;
 		
 		create_plan();
 	}
@@ -78,7 +78,7 @@ void PlanBase<TypeOut,TypeIn>::switch_data(TypeOut & fieldout,TypeIn & fieldin)
 
 
 template <class TypeOut,class TypeIn>
-int PlanBase<TypeOut,TypeIn>::evalsize(int * shape,int rank)
+int PlanBase<TypeOut,TypeIn>::evalsize(const int * shape,int rank)
 {
 	int size_=1;
 	for( int i=0;i<rank;++i)
@@ -87,6 +87,19 @@ int PlanBase<TypeOut,TypeIn>::evalsize(int * shape,int rank)
 }
 
 //Class Plan implementation
+
+
+
+
+
+template <class TypeOut,class TypeIn>
+Plan<TypeOut,TypeIn>::Plan():
+PlanBase<TypeOut,TypeIn>()
+{
+}
+
+
+
 
 //Specialization
 
@@ -112,22 +125,17 @@ template <>
 template <int D>
 void Plan<cat::array<CS,D>,const cat::array<RS,D> >::do_create_plan()
 {
-	cout << "R2C PLAN " << datain << " " << dataout << endl;
-
-	int * dd=datainshape;
-	//dd[0]+=2;
-
-	for(int i=0;i<datainshape[0];++i)
-		cout << dataout[i][1] << endl;
-	
-	fftw_plan_dft_r2c(D,dd,datain,dataout,FFTW_ESTIMATE);
+	//for(int i=0;i<datainshape[0];++i)
+	//	cout << dataout[i][1] << endl;
+	plan=fftw_plan_dft_r2c(D,datainshape,datain,dataout,FFTW_ESTIMATE);
 }
+
 //Complex to Real transforms
 template <>
 template <int D>
 void Plan<cat::array<RS,D>,const cat::array<CS,D> >::do_create_plan()
 {
-	plan=fftw_plan_dft_c2r(D,datainshape,datain,dataout,FFTW_ESTIMATE);
+	plan=fftw_plan_dft_c2r(D,dataoutshape,datain,dataout,FFTW_ESTIMATE);
 }
 
 
@@ -139,10 +147,15 @@ r2r_kind(r2r_kind__)
 {
 }
 
+Plan<cat::array<RS,1>,const cat::array<RS,1> >::~Plan()
+{
+}
+
 //template <>
 void Plan<cat::array<RS,1>,const cat::array<RS,1> >::do_create_plan()
 {
-	plan=fftw_plan_r2r(1,datainshape,datain,dataout,&r2r_kind,FFTW_ESTIMATE);
+	cout << "HHHHH" << endl;
+	plan=fftw_plan_r2r_1d(datainsize,datain,dataout,r2r_kind,FFTW_ESTIMATE);
 }
 
 // //1D Real to Real switch data
