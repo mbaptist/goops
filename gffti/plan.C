@@ -69,7 +69,7 @@ void PlanBase<TypeOut,TypeIn>::switch_data(TypeOut & fieldout,TypeIn & fieldin)
 		datain=fieldin_ptr;
 		datainshape=fieldin.shape().data();
 		datainsize=evalsize(datainshape,fftTypes<TypeIn>::Rank);
-
+		//datainsize=fieldin.size();
 		//cout << datain[1] << endl;
 		
 		create_plan();
@@ -87,19 +87,6 @@ int PlanBase<TypeOut,TypeIn>::evalsize(const int * shape,int rank)
 }
 
 //Class Plan implementation
-
-
-
-
-
-template <class TypeOut,class TypeIn>
-Plan<TypeOut,TypeIn>::Plan():
-PlanBase<TypeOut,TypeIn>()
-{
-}
-
-
-
 
 //Specialization
 
@@ -140,22 +127,23 @@ void Plan<cat::array<RS,D>,const cat::array<CS,D> >::do_create_plan()
 
 
 //1D Real to Real
-//template <>
-Plan<cat::array<RS,1>,const cat::array<RS,1> >::Plan(const fftw_r2r_kind & r2r_kind__):
-PlanBase<cat::array<RS,1>,const cat::array<RS,1> >(),
+template <>
+template <int D>
+Plan<cat::array<RS,D>,const cat::array<RS,D> >::Plan(const fftw_r2r_kind & r2r_kind__):
+PlanBase<cat::array<RS,D>,const cat::array<RS,D> >(),
 r2r_kind(r2r_kind__)
 {
 }
 
-Plan<cat::array<RS,1>,const cat::array<RS,1> >::~Plan()
-{
-}
 
-//template <>
-void Plan<cat::array<RS,1>,const cat::array<RS,1> >::do_create_plan()
+template <>
+template <int D>
+void Plan<cat::array<RS,D>,const cat::array<RS,D> >::do_create_plan()
 {
-	cout << "HHHHH" << endl;
-	plan=fftw_plan_r2r_1d(datainsize,datain,dataout,r2r_kind,FFTW_ESTIMATE);
+// 	cout << "HHHHH" << endl;
+// 	cout << r2r_kind << endl;
+// 	cout << FFTW_REDFT00 << "  " << FFTW_RODFT00 << endl;
+	plan=fftw_plan_r2r(D,datainshape,datain,dataout,&r2r_kind,FFTW_ESTIMATE);
 }
 
 // //1D Real to Real switch data

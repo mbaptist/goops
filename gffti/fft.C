@@ -67,29 +67,33 @@ FFT<cat::array<CS,D>,cat::array<CS,D> >::~FFT()
 }
 
 //1D Real to Real Ctor
-//template <>
-FFT<cat::array<RS,1>,cat::array<RS,1> >::FFT(const string & subtype__):
+template <>
+template <int D>
+FFT<cat::array<RS,D>,cat::array<RS,D> >::FFT(const string & subtype__):
 subtype(subtype__),
-direct_plan(r2r_direct_kind()),
-inverse_plan(r2r_inverse_kind())
+direct_plan(r2r_direct_kind(subtype__)),
+inverse_plan(r2r_inverse_kind(subtype__))
 {
 }
 
-FFT<cat::array<RS,1>,cat::array<RS,1> >::~FFT()
+template <>
+template <int D>
+FFT<cat::array<RS,D>,cat::array<RS,D> >::~FFT()
 {
 }
 
 //1D Real to Real direct transform
-//template <>
-void FFT<cat::array<RS,1>,cat::array<RS,1> >::direct_transform(cat::array<RS,1> & fourierfield, const cat::array<RS,1> & realfield)
+template <>
+template <int D>
+void FFT<cat::array<RS,D>,cat::array<RS,D> >::direct_transform(cat::array<RS,D> & fourierfield, const cat::array<RS,D> & realfield)
 {
 	if(subtype=="sin")
 	{
-		//		cat::array<RS,1> ff=cat::array<RS,1>(cat::tvector<int,1>(fourierfield.size()-2),fourierfield.data()+1);
-		//  const cat::array<RS,1> rf=cat::array<RS,1>(cat::tvector<int,1>(realfield.size()-2),const_cast<RS *>(realfield.data())+1);
+		//		cat::array<RS,D> ff=cat::array<RS,D>(cat::tvector<int,D>(fourierfield.size()-2),fourierfield.data()+1);
+		//  const cat::array<RS,D> rf=cat::array<RS,D>(cat::tvector<int,D>(realfield.size()-2),const_cast<RS *>(realfield.data())+1);
 		
 		size_t len=fourierfield.length()-2;
-		cat::array<RS,1> ff=cat::array<RS,1>(cat::tvector<int,1>(fourierfield.size()-2),fourierfield.ordering(),fourierfield.stride(),len,fourierfield.data()+1);
+		cat::array<RS,D> ff=cat::array<RS,D>(cat::tvector<int,D>(fourierfield.size()-2),fourierfield.ordering(),fourierfield.stride(),len,fourierfield.data()+1);
 		
 // 		array<T,D>::array(tvector<int,D> & shape__,
 // 		                  tvector<int,D> & ordering__,
@@ -98,11 +102,11 @@ void FFT<cat::array<RS,1>,cat::array<RS,1> >::direct_transform(cat::array<RS,1> 
 // 		                  T * data__):
 		
 		len=realfield.length()-2;
-		const cat::tvector<int,1> sha(realfield.size()-2);
-		const cat::tvector<int,1> ord(realfield.ordering());
-		cat::tvector<int,1> str(realfield.stride());
+		const cat::tvector<int,D> sha(realfield.size()-2);
+		const cat::tvector<int,D> ord(realfield.ordering());
+		cat::tvector<int,D> str(realfield.stride());
 		const RS * p = realfield.data()+1;
-		const cat::array<RS,1> rf(sha,ord,str,len,p);
+		const cat::array<RS,D> rf(sha,ord,str,len,p);
 		
 		direct_plan.switch_data(ff,rf);
 		direct_plan.execute();
@@ -119,14 +123,19 @@ void FFT<cat::array<RS,1>,cat::array<RS,1> >::direct_transform(cat::array<RS,1> 
 }
 
 //1D Real to Real inverse transform
-//template <>
-void FFT<cat::array<RS,1>,cat::array<RS,1> >::inverse_transform(cat::array<RS,1> & realfield,const cat::array<RS,1> & fourierfield)
+template <>
+template <int D>
+void FFT<cat::array<RS,D>,cat::array<RS,D> >::inverse_transform(cat::array<RS,D> & realfield,const cat::array<RS,D> & fourierfield)
 {
 	if(subtype=="sin")
 	{
-		//cat::array<RS,1> rf=cat::array<RS,1>(cat::tvector<int,1>(realfield.size()-2),realfield.data()+1);
+		//cat::array<RS,D> rf=cat::array<RS,D>(cat::tvector<int,D>(realfield.size()-2),realfield.data()+1);
 		size_t len=realfield.length()-2;
-			cat::array<RS,1> rf=cat::array<RS,1>(cat::tvector<int,1>(realfield.size()-2),realfield.ordering(),realfield.stride(),len,realfield.data());
+			cat::array<RS,D> rf(cat::tvector<int,D>(realfield.size()-2),
+			                    realfield.ordering(),
+			                    realfield.stride(),
+			                    len,
+			                    realfield.data()+1);
 		
 // 		array<T,D>::array(tvector<int,D> & shape__,
 // 		                  tvector<int,D> & ordering__,
@@ -134,20 +143,23 @@ void FFT<cat::array<RS,1>,cat::array<RS,1> >::inverse_transform(cat::array<RS,1>
 // 		                  size_t & length__,
 // 		                  T * data__):
 
-		//const cat::array<RS,1> ff=cat::array<RS,1>(cat::tvector<int,1>(fourierfield.size()-2),const_cast<RS *>(fourierfield.data())+1);
+		//const cat::array<RS,D> ff=cat::array<RS,D>(cat::tvector<int,D>(fourierfield.size()-2),const_cast<RS *>(fourierfield.data())+1);
 		
 		len=fourierfield.length()-2;
-		const cat::tvector<int,1> sha(fourierfield.size()-2);
-		const cat::tvector<int,1> ord(fourierfield.ordering());
-		cat::tvector<int,1> str(fourierfield.stride());
-		const RS * p = fourierfield.data();
-		const cat::array<RS,1> ff(sha,ord,str,len,p);
+		const cat::tvector<int,D> sha(fourierfield.size()-2);
+		const cat::tvector<int,D> ord(fourierfield.ordering());
+		cat::tvector<int,D> str(fourierfield.stride());
+		const RS * p = fourierfield.data()+1;
+		const cat::array<RS,D> ff(sha,ord,str,len,p);
 		
-		//cout << fourierfield << "\n\n" << ff << endl;
-		cout << fourierfield.size() << endl;
+		//cout << rf << "\n\n" << ff << endl;
 		inverse_plan.switch_data(rf,ff);
 		inverse_plan.execute();
-		cout << realfield << endl;
+
+		//cout << rf << "\n\n" << ff << endl;
+		//exit(0);
+		
+		//cout << realfield << endl;
 		realfield(0)=0;
 		realfield(realfield.size()-1)=0;
 	}
@@ -161,19 +173,22 @@ void FFT<cat::array<RS,1>,cat::array<RS,1> >::inverse_transform(cat::array<RS,1>
 	realfield*=.5;
 }
 
-//template <>
-fftw_r2r_kind FFT<cat::array<RS,1>,cat::array<RS,1> >::r2r_direct_kind()
+template <>
+template <int D>
+fftw_r2r_kind FFT<cat::array<RS,D>,cat::array<RS,D> >::r2r_direct_kind(const string & subtype__)
 {
-	if (subtype=="sin")
+	if (subtype__=="sin")
 		return FFTW_RODFT00;
 	else
 		return FFTW_REDFT00;
 }
 
-//template <>
-fftw_r2r_kind FFT<cat::array<RS,1>,cat::array<RS,1> >::r2r_inverse_kind()
+template <>
+template <int D>
+fftw_r2r_kind FFT<cat::array<RS,D>,cat::array<RS,D> >::r2r_inverse_kind(const string & subtype__)
 {
-	if (subtype=="sin")
+	//cout << subtype << endl;
+	if (subtype__=="sin")
 		return FFTW_RODFT00;
 	else
 		return FFTW_REDFT00;

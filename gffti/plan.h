@@ -65,16 +65,6 @@ public:
 template <class TypeOut,class TypeIn>
 	class Plan: public PlanBase<TypeOut,TypeIn>
 {
-	typedef PlanBase<TypeOut,TypeIn> BaseClass;
-	using BaseClass::dataout;
-	using BaseClass::dataoutshape;
-	using BaseClass::dataoutsize;
-	using BaseClass::datain;
-	using BaseClass::datainshape;
-	using BaseClass::datainsize;
-	using BaseClass::plan_exists;
-	using BaseClass::plan;
-	Plan();
 };
 
 //Specialisations of class Plan
@@ -139,10 +129,11 @@ private:
 
 //1D Real to Real transforms (both directions for sine and co-sine transforms)
 template <>
-	class Plan<cat::array<RS,1>,const cat::array<RS,1> >: public PlanBase<cat::array<RS,1>,const cat::array<RS,1> >
+template <int D>
+	class Plan<cat::array<RS,D>,const cat::array<RS,D> >: public PlanBase<cat::array<RS,D>,const cat::array<RS,D> >
 {
 private:
-	typedef PlanBase<cat::array<RS,1>,const cat::array<RS,1> > BaseClass;
+	typedef PlanBase<cat::array<RS,D>,const cat::array<RS,D> > BaseClass;
 	using BaseClass::dataout;
 	using BaseClass::dataoutshape;
 	using BaseClass::dataoutsize;
@@ -154,7 +145,6 @@ private:
 	fftw_r2r_kind r2r_kind;
 public:
 	Plan(const fftw_r2r_kind & r2r_kind__);
-	~Plan();
 private:
 	Plan();
 	void do_create_plan();
