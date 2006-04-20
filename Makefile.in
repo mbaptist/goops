@@ -13,8 +13,7 @@ LIB = -lpthread
 
 GFFTI_OBJECTS = \
   ./gffti/s_rfft_h_z.o \
-	./gffti/v_rfft_h_z_ssc.o \
-	./gffti/v_rfft_h_z_ccs.o
+	./gffti/v_rfft_h_z.o \
 
 GSPECTRAL_OBJECTS= \
         ./gspectral/spectral_fourier.o \
