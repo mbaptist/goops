@@ -10,7 +10,7 @@ CXX = g++ -O3 -m32 -msse2
 
 INCLUDE = -I/home/mbaptist/work/codes/devel/cat 
 
-OBJECTS = s_rfft_h_z.o v_rfft_h_z_ssc.o v_rfft_h_z_ccs.o
+OBJECTS = s_rfft_h_z.o v_rfft_h_z.o
 
 ########################################################################
 

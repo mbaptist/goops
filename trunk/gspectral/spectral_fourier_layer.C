@@ -33,8 +33,8 @@ spectral_fourier_layer::spectral_fourier_layer(const int & n1__,
   wv2(n1,n2/2+1,n3),
   dealiasing_limit(0),
   dealiasing_mask(n1,n2/2+1,n3),
-  fft_ccs(cat::tvector<int,3>(n1,n2,n3)),
-  fft_ssc(cat::tvector<int,3>(n1,n2,n3)),
+  fft_ccs("cos","cos","sin"),
+  fft_ssc("sin","sin","cos"),
   sfft_s("sin"),
 sfft_c("cos")
 {

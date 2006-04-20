@@ -25,8 +25,7 @@
 
 //vector real/complex transforms, heterogeneous along z
 //Only defined for D=3, N=3
-#include "v_rfft_h_z_ccs.h"
-#include "v_rfft_h_z_ssc.h"
+#include "v_rfft_h_z.h"
 
 #endif
 

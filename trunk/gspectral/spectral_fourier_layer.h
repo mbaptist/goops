@@ -29,8 +29,8 @@ private:
 
 public:
   //Object to perform ffts
-  v_rfft_h_z_ccs fft_ccs;
-  v_rfft_h_z_ssc fft_ssc;
+  v_rfft_h_z fft_ccs;
+  v_rfft_h_z fft_ssc;
   s_rfft_h_z sfft_s;
   s_rfft_h_z sfft_c;
   
