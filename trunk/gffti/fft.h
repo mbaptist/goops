@@ -74,6 +74,8 @@ class FFT<cat::array<RS,D>,cat::array<RS,D> >
 {
 	typedef cat::array<RS,D> RealType;
 	typedef cat::array<RS,D> FourierType;
+	typedef void (FFT::* DTT)(FourierType & fourierfield,const RealType & realfield);
+	typedef void (FFT::* ITT)(RealType & realfield,const FourierType & fourierfield);
 public:
 	Plan<FourierType,const RealType> direct_plan;
 	Plan<RealType,const FourierType> inverse_plan;
@@ -95,6 +97,12 @@ private:
 	const string subtype;
 	fftw_r2r_kind r2r_direct_kind(const string & subtype__);
 	fftw_r2r_kind r2r_inverse_kind(const string & subtype__);
+	DTT direct_transform_imp;
+	ITT inverse_transform_imp;
+	void sin_direct_transform(FourierType & fourierfield,const RealType & realfield);
+	void sin_inverse_transform(RealType & realfield,const FourierType & fourierfield);
+	void cos_direct_transform(FourierType & fourierfield,const RealType & realfield);
+	void cos_inverse_transform(RealType & realfield,const FourierType & fourierfield);
 };
 
 #include "fft.C"

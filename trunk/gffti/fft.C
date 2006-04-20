@@ -74,6 +74,16 @@ subtype(subtype__),
 direct_plan(r2r_direct_kind(subtype__)),
 inverse_plan(r2r_inverse_kind(subtype__))
 {
+	if (subtype=="sin")
+	{
+		direct_transform_imp=&FFT<cat::array<RS,D>,cat::array<RS,D> >::sin_direct_transform;
+		inverse_transform_imp=&FFT<cat::array<RS,D>,cat::array<RS,D> >::sin_inverse_transform;
+	}
+	else
+	{
+		direct_transform_imp=&FFT<cat::array<RS,D>,cat::array<RS,D> >::cos_direct_transform;
+		inverse_transform_imp=&FFT<cat::array<RS,D>,cat::array<RS,D> >::cos_inverse_transform;
+	}
 }
 
 template <>
@@ -87,8 +97,22 @@ template <>
 template <int D>
 void FFT<cat::array<RS,D>,cat::array<RS,D> >::direct_transform(cat::array<RS,D> & fourierfield, const cat::array<RS,D> & realfield)
 {
-	if(subtype=="sin")
-	{
+	(this->*direct_transform_imp)(fourierfield,realfield);
+}
+
+//1D Real to Real inverse transform
+template <>
+template <int D>
+void FFT<cat::array<RS,D>,cat::array<RS,D> >::inverse_transform(cat::array<RS,D> & realfield,const cat::array<RS,D> & fourierfield)
+{
+	(this->*inverse_transform_imp)(realfield,fourierfield);
+}
+
+//1D Real to Real direct sine transform 
+template <>
+template <int D>
+void FFT<cat::array<RS,D>,cat::array<RS,D> >::sin_direct_transform(cat::array<RS,D> & fourierfield, const cat::array<RS,D> & realfield)
+{
 		//		cat::array<RS,D> ff=cat::array<RS,D>(cat::tvector<int,D>(fourierfield.size()-2),fourierfield.data()+1);
 		//  const cat::array<RS,D> rf=cat::array<RS,D>(cat::tvector<int,D>(realfield.size()-2),const_cast<RS *>(realfield.data())+1);
 		
@@ -112,23 +136,14 @@ void FFT<cat::array<RS,D>,cat::array<RS,D> >::direct_transform(cat::array<RS,D> 
 		direct_plan.execute();
 		fourierfield(0)=0;
 		fourierfield(fourierfield.size()-1)=0;
-	}
-	else
-	{
-		direct_plan.switch_data(fourierfield,realfield);
-		direct_plan.execute();
-		fourierfield(0)*=.5;
-	}
 	fourierfield/=(realfield.size()-1);
 }
 
-//1D Real to Real inverse transform
+//1D Real to Real inverse sine transform
 template <>
 template <int D>
-void FFT<cat::array<RS,D>,cat::array<RS,D> >::inverse_transform(cat::array<RS,D> & realfield,const cat::array<RS,D> & fourierfield)
+void FFT<cat::array<RS,D>,cat::array<RS,D> >::sin_inverse_transform(cat::array<RS,D> & realfield,const cat::array<RS,D> & fourierfield)
 {
-	if(subtype=="sin")
-	{
 		//cat::array<RS,D> rf=cat::array<RS,D>(cat::tvector<int,D>(realfield.size()-2),realfield.data()+1);
 		size_t len=realfield.length()-2;
 			cat::array<RS,D> rf(cat::tvector<int,D>(realfield.size()-2),
@@ -162,14 +177,28 @@ void FFT<cat::array<RS,D>,cat::array<RS,D> >::inverse_transform(cat::array<RS,D>
 		//cout << realfield << endl;
 		realfield(0)=0;
 		realfield(realfield.size()-1)=0;
-	}
-	else
-	{
+	realfield*=.5;
+}
+//1D Real to Real direct co-sine transform 
+template <>
+template <int D>
+void FFT<cat::array<RS,D>,cat::array<RS,D> >::cos_direct_transform(cat::array<RS,D> & fourierfield, const cat::array<RS,D> & realfield)
+{
+		direct_plan.switch_data(fourierfield,realfield);
+		direct_plan.execute();
+		fourierfield(0)*=.5;
+	fourierfield/=(realfield.size()-1);
+}
+
+//1D Real to Real inverse co-sine transform
+template <>
+template <int D>
+void FFT<cat::array<RS,D>,cat::array<RS,D> >::cos_inverse_transform(cat::array<RS,D> & realfield,const cat::array<RS,D> & fourierfield)
+{
 		inverse_plan.switch_data(realfield,fourierfield);
 		inverse_plan.execute();
 		RS av=fourierfield(0);
 		realfield+=av;
-	}
 	realfield*=.5;
 }
 
