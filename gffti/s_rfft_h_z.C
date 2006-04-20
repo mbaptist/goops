@@ -67,17 +67,6 @@ void s_rfft_h_z::direct_transform(CT3& u_hat,const RT3& u)
 			for(int j=0;j<size[1]/2+1;++j)
 				u_hat(i,j,k)=uxy_hat(i,j);
 	}
-	
-#if 0 
-  cout << "h1" << endl;
-    for(int k1=0;k1<size[0];++k1)
-    for(int k2=0;k2<size[1]/2+1;++k2)
-      for(int k3=0;k3<size[2];++k3)
-	if ( abs( u_hat(k1,k2,k3)) > 1e-12 )
-	  cout << u_hat(k1,k2,k3) << endl;
-    cout << endl;
-#endif
-	
 }
 
 void s_rfft_h_z::inverse_transform(RT3& u,const CT3& u_hat)
