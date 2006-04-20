@@ -36,16 +36,18 @@ class v_rfft_h_z_ccs
  public:
   //Constructor
   v_rfft_h_z_ccs(cat::tvector<int,3> size_):
-    s_rfft_cos_obj("cos"),
-    s_rfft_sin_obj("sin"){};
+    s_rfft_x_obj("cos"),
+		s_rfft_y_obj("cos"),
+    s_rfft_z_obj("sin"){};
   //Destructor
   ~v_rfft_h_z_ccs(){};
   //Transformation functions for vectors
   void direct_transform(VCT& u_hat,const VRT& u);
   void inverse_transform(VRT& u,const VCT& u_hat);  
  private:
-  s_rfft_h_z s_rfft_cos_obj;
-  s_rfft_h_z s_rfft_sin_obj;
+  s_rfft_h_z s_rfft_x_obj;
+	s_rfft_h_z s_rfft_y_obj;
+  s_rfft_h_z s_rfft_z_obj;
 };
 
 

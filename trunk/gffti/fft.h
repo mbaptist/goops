@@ -69,10 +69,11 @@ public:
 };
 
 template <>
-class FFT<cat::array<RS,1>,cat::array<RS,1> >
+template <int D>
+class FFT<cat::array<RS,D>,cat::array<RS,D> >
 {
-	typedef cat::array<RS,1> RealType;
-	typedef cat::array<RS,1> FourierType;
+	typedef cat::array<RS,D> RealType;
+	typedef cat::array<RS,D> FourierType;
 public:
 	Plan<FourierType,const RealType> direct_plan;
 	Plan<RealType,const FourierType> inverse_plan;
@@ -92,8 +93,8 @@ public:
 	//RealType inverse_transform(const FourierType & fourierfield);
 private:
 	const string subtype;
-	fftw_r2r_kind r2r_direct_kind();
-	fftw_r2r_kind r2r_inverse_kind();
+	fftw_r2r_kind r2r_direct_kind(const string & subtype__);
+	fftw_r2r_kind r2r_inverse_kind(const string & subtype__);
 };
 
 #include "fft.C"
