@@ -59,6 +59,7 @@ public:
 	//Public methods
 	void switch_data(TypeOut & fieldout,TypeIn & fieldin);
 	void execute();
+	virtual void guru_execute(TypeOut & fieldout,TypeIn & fieldin)=0;
 };
 
 //Generic class Plan (inherits from class PlanBase)
@@ -74,6 +75,8 @@ template <>
 	template <int D>
 	class Plan<cat::array<CS,D>,const cat::array<CS,D> >: public PlanBase<cat::array<CS,D>,const cat::array<CS,D> >
 {
+	typedef cat::array<CS,D> TypeOut;
+	typedef const cat::array<CS,D> TypeIn;
 	typedef PlanBase<cat::array<CS,D>,const cat::array<CS,D> > BaseClass;
 	using BaseClass::dataout;
 	using BaseClass::dataoutshape;
@@ -89,6 +92,8 @@ public:
 private:
 	Plan();//Forbids default ctor, since the direction of the transform must be specified
 	void do_create_plan();
+public:
+	void guru_execute(TypeOut & fieldout,TypeIn & fieldin);
 };
 
 //Real to Complex transforms (direct transform)
@@ -97,6 +102,8 @@ template <int D>
 class Plan<cat::array<CS,D>,const cat::array<RS,D> >: public PlanBase<cat::array<CS,D>,const cat::array<RS,D> >
 {
 private:
+	typedef cat::array<CS,D> TypeOut;
+	typedef const cat::array<RS,D> TypeIn;
 	typedef PlanBase<cat::array<CS,D>,const cat::array<RS,D> > BaseClass;
 	using BaseClass::dataout;
 	using BaseClass::dataoutshape;
@@ -107,6 +114,8 @@ private:
 	using BaseClass::plan_exists;
 	using BaseClass::plan;
 	void do_create_plan();
+public:
+	void guru_execute(TypeOut & fieldout,TypeIn & fieldin);
 };
 
 //Complex to Real transforms (inverse transform)
@@ -115,6 +124,8 @@ template <>
 	class Plan<cat::array<RS,D>,const cat::array<CS,D> >: public PlanBase<cat::array<RS,D>,const cat::array<CS,D> >
 {
 private:
+	typedef cat::array<RS,D> TypeOut;
+	typedef const cat::array<CS,D> TypeIn;
 	typedef PlanBase<cat::array<RS,D>,const cat::array<CS,D> > BaseClass;
 	using BaseClass::dataout;
 	using BaseClass::dataoutshape;
@@ -125,6 +136,8 @@ private:
 	using BaseClass::plan_exists;
 	using BaseClass::plan;
 	void do_create_plan();
+public:
+	void guru_execute(TypeOut & fieldout,TypeIn & fieldin);
  };
 
 //1D Real to Real transforms (both directions for sine and co-sine transforms)
@@ -133,6 +146,8 @@ template <int D>
 	class Plan<cat::array<RS,D>,const cat::array<RS,D> >: public PlanBase<cat::array<RS,D>,const cat::array<RS,D> >
 {
 private:
+	typedef cat::array<RS,D> TypeOut;
+	typedef const cat::array<RS,D> TypeIn;
 	typedef PlanBase<cat::array<RS,D>,const cat::array<RS,D> > BaseClass;
 	using BaseClass::dataout;
 	using BaseClass::dataoutshape;
@@ -149,7 +164,7 @@ private:
 	Plan();
 	void do_create_plan();
 public:
-	//void switch_data(cat::array<RS,1> & fieldout,const cat::array<RS,1> & fieldin);
+	void guru_execute(TypeOut & fieldout,TypeIn & fieldin);
 };
 
 

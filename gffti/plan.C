@@ -62,6 +62,7 @@ void PlanBase<TypeOut,TypeIn>::switch_data(TypeOut & fieldout,TypeIn & fieldin)
 	//cout << datain << " " << fieldin_ptr << endl;
 	if(dataout!=fieldout_ptr||datain!=fieldin_ptr)
 	{
+		cout << "switching" << endl;
 		destroy_plan();
 		dataout=fieldout_ptr;
 		dataoutshape=fieldout.shape().data();
@@ -71,7 +72,6 @@ void PlanBase<TypeOut,TypeIn>::switch_data(TypeOut & fieldout,TypeIn & fieldin)
 		datainsize=evalsize(datainshape,fftTypes<TypeIn>::Rank);
 		//datainsize=fieldin.size();
 		//cout << datain[1] << endl;
-		
 		create_plan();
 	}
 }
@@ -106,6 +106,15 @@ void Plan<cat::array<CS,D>,const cat::array<CS,D> >::do_create_plan()
 {
 	plan=fftw_plan_dft(D,datainshape,datain,dataout,direction,FFTW_ESTIMATE);
 }
+// //Guru execution
+// template <>
+// template <int D>
+// void Plan<cat::array<CS,D>,const cat::array<CS,D> >::guru_execute(cat::array<CS,D> & fieldout,const cat::array<CS,D> & fieldin)
+// {
+// 	BaseClass::fftTypeOut * fieldout_ptr=reinterpret_cast<BaseClass::fftTypeOut *>(fieldout.data());
+// 	BaseClass::fftTypeIn * fieldin_ptr=reinterpret_cast<BaseClass::fftTypeIn *>(const_cast<typename fftTypes<TypeIn>::ccNumericType *>(fieldin.data()));
+// 	fftw_execute_dft(plan,fieldin_ptr, fieldout_ptr);
+// }
 
 //Real to Complex transforms
 template <>
