@@ -59,7 +59,8 @@ public:
 	//Public methods
 	void switch_data(TypeOut & fieldout,TypeIn & fieldin);
 	void execute();
-	virtual void guru_execute(TypeOut & fieldout,TypeIn & fieldin)=0;
+	void execute(TypeOut & fieldout,TypeIn & fieldin);
+	virtual void guru_execute()=0;
 };
 
 //Generic class Plan (inherits from class PlanBase)
@@ -93,7 +94,7 @@ private:
 	Plan();//Forbids default ctor, since the direction of the transform must be specified
 	void do_create_plan();
 public:
-	void guru_execute(TypeOut & fieldout,TypeIn & fieldin);
+	void guru_execute();
 };
 
 //Real to Complex transforms (direct transform)
@@ -115,7 +116,7 @@ private:
 	using BaseClass::plan;
 	void do_create_plan();
 public:
-	void guru_execute(TypeOut & fieldout,TypeIn & fieldin);
+	void guru_execute();
 };
 
 //Complex to Real transforms (inverse transform)
@@ -137,7 +138,7 @@ private:
 	using BaseClass::plan;
 	void do_create_plan();
 public:
-	void guru_execute(TypeOut & fieldout,TypeIn & fieldin);
+	void guru_execute();
  };
 
 //1D Real to Real transforms (both directions for sine and co-sine transforms)
@@ -164,7 +165,7 @@ private:
 	Plan();
 	void do_create_plan();
 public:
-	void guru_execute(TypeOut & fieldout,TypeIn & fieldin);
+	void guru_execute();
 };
 
 

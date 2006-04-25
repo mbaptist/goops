@@ -60,10 +60,10 @@ void PlanBase<TypeOut,TypeIn>::switch_data(TypeOut & fieldout,TypeIn & fieldin)
 	fftTypeOut * fieldout_ptr=reinterpret_cast<fftTypeOut *>(fieldout.data());
 	fftTypeIn * fieldin_ptr=reinterpret_cast<fftTypeIn *>(const_cast<typename fftTypes<TypeIn>::ccNumericType *>(fieldin.data()));
 	//cout << datain << " " << fieldin_ptr << endl;
-	if(dataout!=fieldout_ptr||datain!=fieldin_ptr)
-	{
-		cout << "switching" << endl;
-		destroy_plan();
+	//if(dataout!=fieldout_ptr||datain!=fieldin_ptr)
+	//{
+		//cout << "switching" << endl;
+	//destroy_plan();
 		dataout=fieldout_ptr;
 		dataoutshape=fieldout.shape().data();
 		dataoutsize=evalsize(dataoutshape,fftTypes<TypeOut>::Rank);
@@ -72,8 +72,18 @@ void PlanBase<TypeOut,TypeIn>::switch_data(TypeOut & fieldout,TypeIn & fieldin)
 		datainsize=evalsize(datainshape,fftTypes<TypeIn>::Rank);
 		//datainsize=fieldin.size();
 		//cout << datain[1] << endl;
+	if(!plan_exists)
 		create_plan();
-	}
+		//	}
+}
+
+//Generic switch data
+template <class TypeOut,class TypeIn>
+void PlanBase<TypeOut,TypeIn>::execute(TypeOut & fieldout,TypeIn & fieldin)
+{
+	switch_data(fieldout,fieldin);
+	//execute();
+	guru_execute();
 }
 
 
@@ -106,15 +116,13 @@ void Plan<cat::array<CS,D>,const cat::array<CS,D> >::do_create_plan()
 {
 	plan=fftw_plan_dft(D,datainshape,datain,dataout,direction,FFTW_ESTIMATE);
 }
-// //Guru execution
-// template <>
-// template <int D>
-// void Plan<cat::array<CS,D>,const cat::array<CS,D> >::guru_execute(cat::array<CS,D> & fieldout,const cat::array<CS,D> & fieldin)
-// {
-// 	BaseClass::fftTypeOut * fieldout_ptr=reinterpret_cast<BaseClass::fftTypeOut *>(fieldout.data());
-// 	BaseClass::fftTypeIn * fieldin_ptr=reinterpret_cast<BaseClass::fftTypeIn *>(const_cast<typename fftTypes<TypeIn>::ccNumericType *>(fieldin.data()));
-// 	fftw_execute_dft(plan,fieldin_ptr, fieldout_ptr);
-// }
+//Guru execution
+template <>
+template <int D>
+void Plan<cat::array<CS,D>,const cat::array<CS,D> >::guru_execute()
+{
+	fftw_execute_dft(plan,datain,dataout);
+}
 
 //Real to Complex transforms
 template <>
@@ -125,15 +133,30 @@ void Plan<cat::array<CS,D>,const cat::array<RS,D> >::do_create_plan()
 	//	cout << dataout[i][1] << endl;
 	plan=fftw_plan_dft_r2c(D,datainshape,datain,dataout,FFTW_ESTIMATE);
 }
+//Guru execution
+template <>
+template <int D>
+void Plan<cat::array<CS,D>,const cat::array<RS,D> >::guru_execute()
+{
+	fftw_execute_dft_r2c(plan,datain, dataout);
+}
+
 
 //Complex to Real transforms
 template <>
 template <int D>
 void Plan<cat::array<RS,D>,const cat::array<CS,D> >::do_create_plan()
 {
+	cout << D << dataoutshape[0] <<dataoutshape[1] << plan_exists << endl;
 	plan=fftw_plan_dft_c2r(D,dataoutshape,datain,dataout,FFTW_ESTIMATE);
 }
-
+//Guru execution
+template <>
+template <int D>
+void Plan<cat::array<RS,D>,const cat::array<CS,D> >::guru_execute()
+{
+	fftw_execute_dft_c2r(plan,datain, dataout);
+}
 
 //1D Real to Real
 template <>
@@ -154,6 +177,16 @@ void Plan<cat::array<RS,D>,const cat::array<RS,D> >::do_create_plan()
 // 	cout << FFTW_REDFT00 << "  " << FFTW_RODFT00 << endl;
 	plan=fftw_plan_r2r(D,datainshape,datain,dataout,&r2r_kind,FFTW_ESTIMATE);
 }
+
+
+//Guru execution
+template <>
+template <int D>
+void Plan<cat::array<RS,D>,const cat::array<RS,D> >::guru_execute()
+{
+	fftw_execute_r2r(plan,datain, dataout);
+}
+
 
 // //1D Real to Real switch data
 // //template <>

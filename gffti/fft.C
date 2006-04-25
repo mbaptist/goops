@@ -35,8 +35,9 @@ template <class RealType,class FourierType>
 void FFT<RealType,FourierType>::direct_transform(FourierType & fourierfield, const RealType & realfield)
 {
 	//	cout << field << endl;
-	direct_plan.switch_data(fourierfield,realfield);
-	direct_plan.execute();
+	//direct_plan.switch_data(fourierfield,realfield);
+	//direct_plan.execute();
+	direct_plan.execute(fourierfield,realfield);
 	fourierfield/=realfield.size();
 }
 
@@ -44,8 +45,9 @@ void FFT<RealType,FourierType>::direct_transform(FourierType & fourierfield, con
 template <class RealType,class FourierType>
 void FFT<RealType,FourierType>::inverse_transform(RealType & realfield,const FourierType & fourierfield)
 {
-	inverse_plan.switch_data(realfield,fourierfield);
-	inverse_plan.execute();
+	//inverse_plan.switch_data(realfield,fourierfield);
+	//inverse_plan.execute();
+	inverse_plan.execute(realfield,fourierfield);
 }
 
 
@@ -132,8 +134,10 @@ void FFT<cat::array<RS,D>,cat::array<RS,D> >::sin_direct_transform(cat::array<RS
 		const RS * p = realfield.data()+1;
 		const cat::array<RS,D> rf(sha,ord,str,len,p);
 		
-		direct_plan.switch_data(ff,rf);
-		direct_plan.execute();
+	//direct_plan.switch_data(ff,rf);
+	//direct_plan.execute();
+	direct_plan.execute(ff,rf);
+	
 		fourierfield(0)=0;
 		fourierfield(fourierfield.size()-1)=0;
 	fourierfield/=(realfield.size()-1);
@@ -168,9 +172,10 @@ void FFT<cat::array<RS,D>,cat::array<RS,D> >::sin_inverse_transform(cat::array<R
 		const cat::array<RS,D> ff(sha,ord,str,len,p);
 		
 		//cout << rf << "\n\n" << ff << endl;
-		inverse_plan.switch_data(rf,ff);
-		inverse_plan.execute();
-
+	//inverse_plan.switch_data(rf,ff);
+	//inverse_plan.execute();
+	inverse_plan.execute(rf,ff);
+	
 		//cout << rf << "\n\n" << ff << endl;
 		//exit(0);
 		
@@ -184,8 +189,9 @@ template <>
 template <int D>
 void FFT<cat::array<RS,D>,cat::array<RS,D> >::cos_direct_transform(cat::array<RS,D> & fourierfield, const cat::array<RS,D> & realfield)
 {
-		direct_plan.switch_data(fourierfield,realfield);
-		direct_plan.execute();
+	//direct_plan.switch_data(fourierfield,realfield);
+	//direct_plan.execute();
+	direct_plan.execute(fourierfield,realfield);
 		fourierfield(0)*=.5;
 	fourierfield/=(realfield.size()-1);
 }
@@ -195,8 +201,10 @@ template <>
 template <int D>
 void FFT<cat::array<RS,D>,cat::array<RS,D> >::cos_inverse_transform(cat::array<RS,D> & realfield,const cat::array<RS,D> & fourierfield)
 {
-		inverse_plan.switch_data(realfield,fourierfield);
-		inverse_plan.execute();
+// 		inverse_plan.switch_data(realfield,fourierfield);
+// 		inverse_plan.execute();
+	inverse_plan.execute(realfield,fourierfield);
+	
 		RS av=fourierfield(0);
 		realfield+=av;
 	realfield*=.5;
