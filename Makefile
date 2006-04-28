@@ -3,7 +3,7 @@
 # Manuel Baptista (2004) (2005)
 ########################################################################
 
-CXX = g++ -O3 -mtune=pentium-m
+CXX = g++ -O3 
 
 INCLUDE = -I/home/mbaptist/work/codes/devel/cat 
 
