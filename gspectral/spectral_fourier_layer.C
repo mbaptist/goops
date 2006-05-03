@@ -285,7 +285,9 @@ CVF spectral_fourier_layer::remove_gradient(CVF & field,const bool kind)
 //   return out;
 
   CVF out(field.shape());
+	wv2(0,0,0)=1;
   out=grad_hat(-div_hat(field,kind)/wv2,!kind);
+	wv2(0,0,0)=1e-30;
   field-=out;
   return out;
 
