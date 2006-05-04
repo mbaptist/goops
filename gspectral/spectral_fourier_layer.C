@@ -18,27 +18,26 @@ using namespace cat;
 
 //Construtor
 spectral_fourier_layer::spectral_fourier_layer(const int & n1__,
-					       const int & n2__,
-					       const int & n3__,
-					       const Real & l1__,
-					       const Real & l2__,
-					       const Real & l3__):
-  n1(n1__),
-  n2(n2__),
-  n3(n3__),
-  l1(l1__),
-  l2(l2__),
-  l3(l3__),
-  wv(n1,n2/2+1,n3),
-  wv2(n1,n2/2+1,n3),
-  dealiasing_limit(0),
-  dealiasing_mask(n1,n2/2+1,n3),
-  fft_ccs("cos","cos","sin"),
-  fft_ssc("sin","sin","cos"),
-  sfft_s("sin"),
+                                               const int & n2__,
+                                               const int & n3__,
+                                               const Real & l1__,
+                                               const Real & l2__,
+                                               const Real & l3__):
+n1(n1__),
+n2(n2__),
+n3(n3__),
+l1(l1__),
+l2(l2__),
+l3(l3__),
+wv(n1,n2/2+1,n3),
+wv2(n1,n2/2+1,n3),
+dealiasing_limit(0),
+dealiasing_mask(n1,n2/2+1,n3),
+fft_ccs("cos","cos","sin"),
+fft_ssc("sin","sin","cos"),
+sfft_s("sin"),
 sfft_c("cos")
 {
-
   //define aspect ratios
   Real ar1=2*M_PI/l1;
   Real ar2=2*M_PI/l2;
@@ -58,10 +57,10 @@ sfft_c("cos")
   //evaluate the square of norm of wavevectors
   wv2=norm_sq(wv);
 
+	//Set dealiasing limit
   dealiasing_limit=4./9.*max(wv2);
   //dealiasing_limit=4./9.*pow(max(wv[2]),2.);
   //dealiasing_limit=4./9.*pow(max(wv[0]),2.);
-
 
   //initialise dealiasing mask
   cat::array_iterator<bool,3> dealiasing_mask_iterator(dealiasing_mask);
@@ -76,14 +75,12 @@ sfft_c("cos")
       (*dealiasing_mask_iterator)=0;
     else
       (*dealiasing_mask_iterator)=1;
-
 }
-
 
 //Desctructor
 spectral_fourier_layer::~spectral_fourier_layer()
-{}
-
+{
+}
 
 //Dealiasing
 //performs dealiasing for second order non-linearities
@@ -99,9 +96,6 @@ void spectral_fourier_layer::dealias(CVF& field) const
   //dealiasing
   field*=dealiasing_mask;
 }
-
-
-
 
 //Solve lap(f)=g in fourier space
 CSF spectral_fourier_layer::poisson_hat(const CSF & field)
@@ -155,151 +149,49 @@ CVF spectral_fourier_layer::d_dhorizontal_hat(const CVF & field, const int index
 //Gradient of scalar field
 CVF spectral_fourier_layer::grad_hat(const CSF & field,const bool kind)
 {
-//   CVF out(field.shape());
-//   out=cat::tvector<Complex,3>(I,I,(kind?-1:1));
-//   out*=wv;
-//   out*=field;
-//   return out;
-
-  return CVF(cat::tvector<Complex,3>(I,I,(kind?-1:1))*wv*field);
-
+return CVF(cat::tvector<Complex,3>(I,I,(kind?-1:1))*wv*field);
 }
 //Divergence of vector field
 CSF spectral_fourier_layer::div_hat(const CVF & field,const bool kind)
 {
-//   CVF outc(field.shape());
-//   outc=cat::tvector<Complex,3>(I,I,(kind?-1:1));
-//   outc*=wv;
-//   return CSF(dot_product(outc,field));
-
-  return CSF(dot_product(cat::tvector<Complex,3>(I,I,(kind?-1:1))*wv,field));  
-
+return CSF(dot_product(cat::tvector<Complex,3>(I,I,(kind?-1:1))*wv,field));
 }
 
 //Curl of vector field
 CVF spectral_fourier_layer::curl_hat(const CVF & field,const bool kind)
 {
-//   CVF outc(field.shape());
-//   //Note that the z derivative acts on the 1st 2 components
-//   outc=cat::tvector<Complex,3>(I,I,(kind?1:-1));
-//   outc*=wv;
-//   return CVF(cross_product(outc,field));
-  
   //Note that the z derivative acts on the 1st 2 components
-  return CVF(cross_product(cat::tvector<Complex,3>(I,I,(kind?1:-1))*wv,field));
+return CVF(cross_product(cat::tvector<Complex,3>(I,I,(kind?1:-1))*wv,field));
 }
-
 
 //Laplacian of scalar field
 CSF spectral_fourier_layer::lap_hat(const CSF & field)
 {
-//   CSF out(field.shape());
-//   cat::array_iterator<Complex,3> out_iterator(out);
-//   cat::array_const_iterator<Complex,3> field_iterator(field);
-//   cat::array_const_iterator<Real,3> wv2_iterator(wv2);
-//   for(out_iterator=out.begin(),
-// 	field_iterator=field.begin(),
-// 	wv2_iterator=wv2.begin();
-//       out_iterator!=out.end(),
-// 	field_iterator!=field.end(),
-// 	wv2_iterator!=wv2.end();
-//       ++out_iterator,
-// 	++field_iterator,
-// 	++wv2_iterator)
-//     {
-//       (*out_iterator)=(*field_iterator);
-//       (*out_iterator)*=(-(*wv2_iterator));
-//     }
-
-
-// #if 0
-//   CSF out(field.shape());
-//   for (int i=0;i<field.shape()[0];++i)
-//     for (int j=0;j<field.shape()[1];++j)
-//       for (int k=0;k<field.shape()[2];++k)
-// 	{
-// 	  out(i,j,k)=field(i,j,k);
-// 	  out(i,j,k)*=(-wv2(i,j,k));
-// 	}
-// #endif
-
-//   return out;
-
   return CSF(-wv2*field);
-
 }
 //Laplacian of vector field
 CVF spectral_fourier_layer::lap_hat(const CVF & field)
 {
-//   CVF out(field.shape());
-//   cat::array_iterator<cat::tvector<Complex,3>,3> out_iterator(out);
-//   cat::array_const_iterator<cat::tvector<Complex,3>,3> field_iterator(field);
-//   cat::array_const_iterator<Real,3> wv2_iterator(wv2);
-//   for(out_iterator=out.begin(),
-// 	field_iterator=field.begin(),
-// 	wv2_iterator=wv2.begin();
-//       out_iterator!=out.end(),
-// 	field_iterator!=field.end(),
-// 	wv2_iterator!=wv2.end();
-//       ++out_iterator,
-// 	++field_iterator,
-// 	++wv2_iterator)
-//     {
-//       (*out_iterator)=(*field_iterator);
-//       (*out_iterator)*=(-(*wv2_iterator));
-//     }
-
-
-
-// #if 0
-//   CVF out(field.shape());
-//   for (int i=0;i<field.shape()[0];++i)
-//     for (int j=0;j<field.shape()[1];++j)
-//       for (int k=0;k<field.shape()[2];++k)
-//         for(int m=0;m<3;++m)
-//           {
-//             out(i,j,k)[m]=field(i,j,k)[m];
-//             out(i,j,k)[m]*=(-wv2(i,j,k));
-//           }
-// #endif
-
-//   return out;
-
 return CVF(-wv2*field);
-
 }
-
 
 //Extract gradient part 
 //3D vector field
 CVF spectral_fourier_layer::remove_gradient(CVF & field,const bool kind)
 {
-//   CVF out(field.shape());
-//   CSF sout(field.shape());
-//   sout=div_hat(field,kind);
-//   wv2(0,0,0)=1;
-//   sout/=(-wv2);
-//   wv2(0,0,0)=1e-30;
-//   out=grad_hat(sout,!kind);
-//   field-=out;
-//   return out;
-
   CVF out(field.shape());
 	wv2(0,0,0)=1;
   out=grad_hat(-div_hat(field,kind)/wv2,!kind);
 	wv2(0,0,0)=1e-30;
   field-=out;
   return out;
-
 }
-
-
 
 //L2 scalar product
 //scalars
 Real spectral_fourier_layer::scalar_prod(const CSF & x,
-                                   const CSF & y,
-				   const bool kind) const
+                                         const CSF & y,
+                                         const bool kind) const
 {
 
 #if 1
@@ -335,7 +227,6 @@ Real spectral_fourier_layer::scalar_prod(const CSF & x,
 #endif
 
 #if 0
-
   Real out=0;
   for(int i=0;i<n1;++i)
     for(int k=1;k<n3;++k)
@@ -360,8 +251,6 @@ Real spectral_fourier_layer::scalar_prod(const CVF & x,
 		scalar_prod(x[1],y[1],1)+
 		scalar_prod(x[2],y[2],0));
 }
-
-
 
 //Evaluate energy spectrum
 //scalar fields
