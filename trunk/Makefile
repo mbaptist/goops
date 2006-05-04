@@ -3,7 +3,7 @@
 # Manuel Baptista (2004) (2005)
 ########################################################################
 
-CXX = g++ -O3 -funroll-loops -fexpensive-optimizations
+CXX = g++ -O3 -funroll-loops -fexpensive-optimizations -g
 
 INCLUDE = -I/home/mbaptist/work/codes/devel/cat 
 
