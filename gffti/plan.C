@@ -147,7 +147,6 @@ template <>
 template <int D>
 void Plan<cat::array<RS,D>,const cat::array<CS,D> >::do_create_plan()
 {
-	cout << D << dataoutshape[0] <<dataoutshape[1] << plan_exists << endl;
 	plan=fftw_plan_dft_c2r(D,dataoutshape,datain,dataout,FFTW_ESTIMATE);
 }
 //Guru execution
