@@ -258,14 +258,18 @@ cat::array<Real,1> spectral_fourier_layer::eval_energ_spec(const CSF & field)
 {
   int mx12=n1>n2?n1:n2;
   int mx=mx12>n3?mx12:n3;
-  return eval_energ_spec(field,mx);
+	int mn12=n1<n2?n1:n2;
+	int mn=mn12<n3?mn12:n3;
+  return eval_energ_spec(field,n3);
 }
 //vector fields
 cat::array<Real,1> spectral_fourier_layer::eval_energ_spec(const CVF & field)
 {
   int mx12=n1>n2?n1:n2;
-  int mx=mx12>n3?mx12:n3;
-  return eval_energ_spec(field,mx);
+	int mx=mx12>n3?mx12:n3;
+	int mn12=n1<n2?n1:n2;
+	int mn=mn12<n3?mn12:n3;
+  return eval_energ_spec(field,n3);
 }
 //Evaluate energy spectrum
 //dividing the sphere in npoints shells 
@@ -283,8 +287,7 @@ cat::array<Real,1> spectral_fourier_layer::eval_energ_spec(const CSF & field,con
 	wv2_iterator!=wv2.end();
       ++field_iterator,
 	++wv2_iterator)
-    out(static_cast<int>((*wv2_iterator)/wv2step))+=
-      ((*field_iterator)*conj(*field_iterator)).real();
+    out(static_cast<int>((*wv2_iterator)/wv2step))+=((*field_iterator)*conj(*field_iterator)).real();
   return out;
 }
 //vector fields
@@ -302,8 +305,7 @@ cat::array<Real,1> spectral_fourier_layer::eval_energ_spec(const CVF & field,con
 	wv2_iterator!=wv2.end();
       ++field_iterator,
 	++wv2_iterator)
-    out(static_cast<int>((*wv2_iterator)/wv2step))+=
-      norm_sq(*field_iterator);
+    out(static_cast<int>((*wv2_iterator)/wv2step))+=norm_sq(*field_iterator);
   return out;
 }
 
