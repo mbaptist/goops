@@ -260,7 +260,7 @@ cat::array<Real,1> spectral_fourier_layer::eval_energ_spec(const CSF & field)
   int mx=mx12>n3?mx12:n3;
 	int mn12=n1<n2?n1:n2;
 	int mn=mn12<n3?mn12:n3;
-  return eval_energ_spec(field,n3);
+  return eval_energ_spec(field,mn);
 }
 //vector fields
 cat::array<Real,1> spectral_fourier_layer::eval_energ_spec(const CVF & field)
@@ -269,7 +269,7 @@ cat::array<Real,1> spectral_fourier_layer::eval_energ_spec(const CVF & field)
 	int mx=mx12>n3?mx12:n3;
 	int mn12=n1<n2?n1:n2;
 	int mn=mn12<n3?mn12:n3;
-  return eval_energ_spec(field,n3);
+  return eval_energ_spec(field,mn);
 }
 //Evaluate energy spectrum
 //dividing the sphere in npoints shells 
