@@ -1,0 +1,24 @@
+########################################################################
+# GOOPS - Generic Object Oriented Pseudo Spectra
+# gspectral subdir	
+# Manuel Baptista (2004) (2005)
+########################################################################
+
+CXX = @CXX@ @CXXFLAGS@
+
+########################################################################
+
+INCLUDE = -I@CAT_PREFIX@ -I..
+
+OBJECTS = spectral_fourier.o spectral_fourier_layer.o
+
+########################################################################
+
+all: $(OBJECTS)
+
+%.o: %.C *.h
+	$(CXX) $(INCLUDE) -c $<
+
+clean:
+	@rm -rfv *~ *.o
+
