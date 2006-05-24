@@ -2,8 +2,8 @@
 #ifndef GOOPS_H
 #define GOOPS_H
 
-#include "gffti/gffti.h"
+#include "fft/fft.h"
 
-#include "gspectral/gspectral.h"
+#include "spectral/spectral.h"
 
 #endif

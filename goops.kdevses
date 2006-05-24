@@ -1,31 +1,10 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="8" >
-  <Doc0 NumberOfViews="1" URL="file:///home/mbaptist/work/codes/devel/goops/gffti/fft_types.h" >
-   <View0 Type="Source" />
+ <DocsAndViews NumberOfDocuments="1" >
+  <Doc0 NumberOfViews="1" URL="file:///home/mbaptist/work/codes/devel/goops/goops.h" >
+   <View0 line="5" Type="Source" />
   </Doc0>
-  <Doc1 NumberOfViews="1" URL="file:///home/mbaptist/work/codes/devel/goops/gffti/testgffti.C" >
-   <View0 Type="Source" />
-  </Doc1>
-  <Doc2 NumberOfViews="1" URL="file:///home/mbaptist/work/codes/devel/goops/gffti/fft.C" >
-   <View0 Type="Source" />
-  </Doc2>
-  <Doc3 NumberOfViews="1" URL="file:///home/mbaptist/work/codes/devel/goops/gffti/plan.C" >
-   <View0 Type="Source" />
-  </Doc3>
-  <Doc4 NumberOfViews="1" URL="file:///home/mbaptist/work/codes/devel/goops/gffti/plan.h" >
-   <View0 Type="Source" />
-  </Doc4>
-  <Doc5 NumberOfViews="1" URL="file:///home/mbaptist/work/codes/devel/goops/gffti/fft.h" >
-   <View0 Type="Source" />
-  </Doc5>
-  <Doc6 NumberOfViews="1" URL="file:///home/mbaptist/work/codes/devel/goops/gffti/v_rfft_h_z.C" >
-   <View0 Type="Source" />
-  </Doc6>
-  <Doc7 NumberOfViews="1" URL="file:///home/mbaptist/work/codes/devel/goops/gffti/s_rfft_h_z.C" >
-   <View0 line="0" Type="Source" />
-  </Doc7>
  </DocsAndViews>
  <pluginList>
   <kdevdebugger>
