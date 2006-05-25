@@ -105,6 +105,6 @@ private:
 	void cos_inverse_transform(RealType & realfield,const FourierType & fourierfield);
 };
 
-#include "fft.C"
+#include "fftclass.C"
 
 #endif
