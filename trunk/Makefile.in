@@ -11,34 +11,36 @@ LIB = -lpthread
 
 ########################################################################
 
-GFFTI_OBJECTS = \
-  ./gffti/s_rfft_h_z.o \
-	./gffti/v_rfft_h_z.o \
+FFT_OBJECTS = \
+  ./fft/s_rfft_h_z.o \
+	./fft/v_rfft_h_z.o
 
-GSPECTRAL_OBJECTS= \
-        ./gspectral/spectral_fourier.o \
-        ./gspectral/spectral_fourier_layer.o
+SPECTRAL_OBJECTS= \
+        ./spectral/spectral_fourier_base.o \
+        ./spectral/spectral_fourier.o \
+        ./spectral/spectral_fourier_layer.o
 
-OBJECTS = $(GFFTI_OBJECTS) $(GSPECTRAL_OBJECTS)
+OBJECTS = $(FFT_OBJECTS) $(SPECTRAL_OBJECTS)
 
-GFFTI_INSTALL_HEADERS = \
-	./gffti/gffti.h \
-	./gffti/s_fft.h \
-	./gffti/s_rfft.h \
-	./gffti/s_sinfft_1d.h \
-	./gffti/s_cosfft_1d.h \
-	./gffti/s_fft_h_z.h \
-	./gffti/s_rfft_h_z.h \
-	./gffti/v_rfft.h \
-	./gffti/v_rfft_h_z_ccs.h \
-	./gffti/v_rfft_h_z_ssc.h
+FFT_INSTALL_HEADERS = \
+	./fft/fft.h \
+	./fft/s_fft.h \
+	./fft/s_rfft.h \
+	./fft/s_sinfft_1d.h \
+	./fft/s_cosfft_1d.h \
+	./fft/s_fft_h_z.h \
+	./fft/s_rfft_h_z.h \
+	./fft/v_rfft.h \
+	./fft/v_rfft_h_z_ccs.h \
+	./fft/v_rfft_h_z_ssc.h
 
-GSPECTRAL_INSTALL_HEADERS = \
-	./gspectral/gspectral.h \
-	./gspectral/spectral_fourier.h \
-	./gspectral/spectral_fourier_layer.h
+SPECTRAL_INSTALL_HEADERS = \
+	./spectral/spectral.h \
+  ./spectral/spectral_fourier_base.h \
+	./spectral/spectral_fourier.h \
+	./spectral/spectral_fourier_layer.h
 		
-INSTALL_HEADERS = $(GFFTI_INSTALL_HEADERS) $(GSPECTRAL_INSTALL_HEADERS)
+INSTALL_HEADERS = $(FFT_INSTALL_HEADERS) $(SPECTRAL_INSTALL_HEADERS)
 
 INSTALL_ROOT = @prefix@
 
@@ -48,8 +50,8 @@ all: libgoops
 #test
 
 libgoops:
-	$(MAKE) -C ./gffti
-	$(MAKE) -C ./gspectral
+	$(MAKE) -C ./fft
+	$(MAKE) -C ./spectral
 	$(CXX) -shared -o libgoops.so $(OBJECTS) $(LIB)
 	ar rcs libgoops.a $(OBJECTS)
 
@@ -58,8 +60,8 @@ test:
 
 clean:
 	@rm -rfv *~ *.o *.a *.so
-	$(MAKE) -C ./gffti clean 
-	$(MAKE) -C ./gspectral clean 
+	$(MAKE) -C ./fft clean
+	$(MAKE) -C ./spectral clean
 	$(MAKE) -C ./testing clean 
 
 install:
