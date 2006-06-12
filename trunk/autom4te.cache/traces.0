@@ -100,8 +100,8 @@ m4trace:configure.ac:38: -1- AH_OUTPUT([inline], [/* Define to `__inline__\' or 
 #undef inline
 #endif])
 m4trace:configure.ac:45: -1- AC_CONFIG_FILES([Makefile \
-		gffti/Makefile \
-		gspectral/Makefile
+		fft/Makefile \
+		spectral/Makefile
 		testing/Makefile ])
 m4trace:configure.ac:46: -1- AC_SUBST([LIB@&t@OBJS], [$ac_libobjs])
 m4trace:configure.ac:46: -1- AC_SUBST([LTLIBOBJS], [$ac_ltlibobjs])
