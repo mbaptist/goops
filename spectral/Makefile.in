@@ -10,7 +10,7 @@ CXX = @CXX@ @CXXFLAGS@
 
 INCLUDE = -I@CAT_PREFIX@ -I..
 
-OBJECTS = spectral_fourier.o spectral_fourier_layer.o
+OBJECTS = spectral_fourier_base.o spectral_fourier.o spectral_fourier_layer.o
 
 ########################################################################
 
