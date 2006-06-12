@@ -273,7 +273,7 @@ PACKAGE_VERSION='0.1b'
 PACKAGE_STRING='goops 0.1b'
 PACKAGE_BUGREPORT='mbaptist@fc.up.pt'
 
-ac_unique_file="gspectral/spectral_fourier_layer.C"
+ac_unique_file="spectral/spectral_fourier_layer.C"
 ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA RANLIB ac_ct_RANLIB CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CC CFLAGS ac_ct_CC CPP CAT_PREFIX CAT_CFLAGS LIB@&t@OBJS LTLIBOBJS'
 ac_subst_files=''
 
@@ -3269,7 +3269,7 @@ esac
 
 # Checks for library functions.
 
-                                        ac_config_files="$ac_config_files Makefile gffti/Makefile gspectral/Makefile testing/Makefile"
+                                        ac_config_files="$ac_config_files Makefile fft/Makefile spectral/Makefile testing/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3823,8 +3823,8 @@ do
   case "$ac_config_target" in
   # Handling of arguments.
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-  "gffti/Makefile" ) CONFIG_FILES="$CONFIG_FILES gffti/Makefile" ;;
-  "gspectral/Makefile" ) CONFIG_FILES="$CONFIG_FILES gspectral/Makefile" ;;
+  "fft/Makefile" ) CONFIG_FILES="$CONFIG_FILES fft/Makefile" ;;
+  "spectral/Makefile" ) CONFIG_FILES="$CONFIG_FILES spectral/Makefile" ;;
   "testing/Makefile" ) CONFIG_FILES="$CONFIG_FILES testing/Makefile" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
