@@ -4,7 +4,7 @@
 AC_PREREQ(2.59)
 AC_INIT(goops, 0.1b, mbaptist@fc.up.pt)
 
-AC_CONFIG_SRCDIR([gspectral/spectral_fourier_layer.C])
+AC_CONFIG_SRCDIR([spectral/spectral_fourier_layer.C])
 
 AC_PROG_INSTALL
 AC_PROG_RANLIB
@@ -40,8 +40,8 @@ AC_C_INLINE
 # Checks for library functions.
 
 AC_CONFIG_FILES([Makefile \
-		gffti/Makefile \
-		gspectral/Makefile
+		fft/Makefile \
+		spectral/Makefile
 		testing/Makefile ])
 AC_OUTPUT
 
