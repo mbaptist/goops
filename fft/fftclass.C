@@ -189,10 +189,11 @@ template <>
 template <int D>
 void FFT<cat::array<RS,D>,cat::array<RS,D> >::cos_direct_transform(cat::array<RS,D> & fourierfield, const cat::array<RS,D> & realfield)
 {
+	//cout << "COS direct transform" << endl;
 	//direct_plan.switch_data(fourierfield,realfield);
 	//direct_plan.execute();
 	direct_plan.execute(fourierfield,realfield);
-		fourierfield(0)*=.5;
+	fourierfield(0)*=.5;
 	fourierfield/=(realfield.size()-1);
 }
 
@@ -201,13 +202,24 @@ template <>
 template <int D>
 void FFT<cat::array<RS,D>,cat::array<RS,D> >::cos_inverse_transform(cat::array<RS,D> & realfield,const cat::array<RS,D> & fourierfield)
 {
+	// cout << "COS inverse transform" << endl;
 // 		inverse_plan.switch_data(realfield,fourierfield);
 // 		inverse_plan.execute();
 	inverse_plan.execute(realfield,fourierfield);
 	
-		RS av=fourierfield(0);
-		realfield+=av;
-	realfield*=.5;
+	RS f0=fourierfield(0);
+	RS fnm1=fourierfield(fourierfield.size()-1);
+	typename cat::array<RS,D>::iterator iter(realfield);
+	int sign=1;
+	for(iter=realfield.begin();iter!=realfield.end();++iter)
+	{
+		(*iter)+=f0+sign*fnm1;
+		(*iter)*=.5;
+		sign*=-1;
+	}
+// 	realfield+=f0;
+// 	realfield*=.5;
+	
 }
 
 template <>
