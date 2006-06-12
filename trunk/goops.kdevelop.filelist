@@ -37,3 +37,5 @@ gffti/fftw_types.h
 gffti/fft.h
 gffti/fft.C
 gffti/fft_types.h
+spectral/fourier_space.h
+spectral/fourier_space.C
