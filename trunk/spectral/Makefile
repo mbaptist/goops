@@ -4,13 +4,13 @@
 # Manuel Baptista (2004) (2005)
 ########################################################################
 
-CXX = g++ -O3 -m32 -msse2 -mfpmath=sse
+CXX = g++ -O3 -funroll-loops -fexpensive-optimizations  
 
 ########################################################################
 
 INCLUDE = -I/home/mbaptist/work/codes/devel/cat -I..
 
-OBJECTS = spectral_fourier.o spectral_fourier_layer.o
+OBJECTS = spectral_fourier_base.o spectral_fourier.o spectral_fourier_layer.o
 
 ########################################################################
 
