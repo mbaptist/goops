@@ -35,7 +35,9 @@ ar2(ar2__),
 ar3(ar3__),
 wv(n1_hat__,n2_hat__,n3_hat__),
 wv2(n1_hat__,n2_hat__,n3_hat__),
-dealiasing_limit(0),
+wnmax(0.),
+wnstep(1.),
+dealiasing_limit(0.),
 dealiasing_mask(n1_hat__,n2_hat__,n3_hat__)
 {
 }

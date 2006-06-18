@@ -19,7 +19,10 @@ protected:
 	Real l1,l2,l3;//physical dimensions
 	Real ar1,ar2,ar3;//aspect ratios
 	RVF wv;//wavevectors
-	RSF wv2;//Square of the norm of wavevectors 
+	RSF wv2;//Square of the norm of wavevectors
+	Real wnmax;
+	int nwn;
+	Real wnstep;
   Real dealiasing_limit;
   cat::array<bool,3> dealiasing_mask;
 

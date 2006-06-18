@@ -42,6 +42,14 @@ void SpectralFourierLayer::initialise()
 	
   //evaluate the square of norm of wavevectors
 	wv2=norm_sq(wv);
+
+	wnmax=max(wv2);
+	int mx12=n1>n2?n1/2+1:n2/2+1;
+	int mx=mx12>n3?mx12:n3;
+	int mn12=n1<n2?n1/2+1:n2/2+1;
+	int mn=mn12<n3?mn12:n3;
+	nwn=mn;
+	wnstep=wnmax/(nwn-1);
 	
 	//Set dealiasing limit
 	dealiasing_limit=4./9.*max(wv2);
@@ -197,32 +205,12 @@ Real SpectralFourierLayer::scalar_prod(const CVF & x,const CVF & y) const
 }
 
 //Evaluate energy spectrum
+//dividing the sphere in nwn-1 shells
 //scalar fields
 cat::array<Real,1> SpectralFourierLayer::eval_energ_spec(const CSF & field,const bool & kind)
 {
-	int mx12=n1>n2?n1:n2;
-	int mx=mx12>n3?mx12:n3;
-	int mn12=n1<n2?n1:n2;
-	int mn=mn12<n3?mn12:n3;
-	return eval_energ_spec(field,mn,kind);
-}
-//vector fields
-cat::array<Real,1> SpectralFourierLayer::eval_energ_spec(const CVF & field,const bool & kind)
-{
-	int mx12=n1>n2?n1:n2;
-	int mx=mx12>n3?mx12:n3;
-	int mn12=n1<n2?n1:n2;
-	int mn=mn12<n3?mn12:n3;
-	return eval_energ_spec(field,mn,kind);
-}
-//Evaluate energy spectrum
-//dividing the sphere in npoints shells 
-//scalar fields
-cat::array<Real,1> SpectralFourierLayer::eval_energ_spec(const CSF & field,const int & npoints,const bool & kind)
-{
-	cat::array<Real,1> out(npoints);
-	out=0;
-	Real wvstep=sqrt(max(wv2))/(npoints-1);
+	cat::array<Real,1> out(nwn-1);
+	out=0;	
 	CSF::const_iterator field_iterator(field);
 	RSF::iterator wv2_iterator(wv2);
 	for(field_iterator=field.begin(),
@@ -232,30 +220,28 @@ cat::array<Real,1> SpectralFourierLayer::eval_energ_spec(const CSF & field,const
 	    ++field_iterator,
 	    ++wv2_iterator)
 	{
-		//out(static_cast<int>((*wv2_iterator)/wv2step))+=((*field_iterator)*conj(*field_iterator)).real();
-		//cout << *wv2_iterator << endl;
 		if((field_iterator.indices())[2]!=0)
 		{
 			if((field_iterator.indices())[1]==0)
-				out(static_cast<int>(sqrt(*wv2_iterator)/wvstep))+=.5*((*field_iterator)*conj(*field_iterator)).real();
+				out(static_cast<int>(sqrt(*wv2_iterator)/wnstep))+=.5*((*field_iterator)*conj(*field_iterator)).real();
 			else
-				out(static_cast<int>(sqrt(*wv2_iterator)/wvstep))+=((*field_iterator)*conj(*field_iterator)).real();
+				out(static_cast<int>(sqrt(*wv2_iterator)/wnstep))+=((*field_iterator)*conj(*field_iterator)).real();
 		}
 		else if(kind==1)
 		{
 				if((field_iterator.indices())[1]==0)
-					out(static_cast<int>(sqrt(*wv2_iterator)/wvstep))+=((*field_iterator)*conj(*field_iterator)).real();
+					out(static_cast<int>(sqrt(*wv2_iterator)/wnstep))+=((*field_iterator)*conj(*field_iterator)).real();
 				else
-					out(static_cast<int>(sqrt(*wv2_iterator)/wvstep))+=2.*((*field_iterator)*conj(*field_iterator)).real();
+					out(static_cast<int>(sqrt(*wv2_iterator)/wnstep))+=2.*((*field_iterator)*conj(*field_iterator)).real();
 		}
 	}
-	out*=.5/wvstep;
+	out*=.5/wnstep;
 	return out;
 }
 //vector fields
-cat::array<Real,1> SpectralFourierLayer::eval_energ_spec(const CVF & field,const int & npoints,const bool & kind)
+cat::array<Real,1> SpectralFourierLayer::eval_energ_spec(const CVF & field,const bool & kind)
 {
-	return cat::array<Real,1>(eval_energ_spec(field[0],npoints,!kind)+eval_energ_spec(field[1],npoints,!kind)+eval_energ_spec(field[2],npoints,kind));
+	return cat::array<Real,1>(eval_energ_spec(field[0],!kind)+eval_energ_spec(field[1],!kind)+eval_energ_spec(field[2],kind));
 }
 
 

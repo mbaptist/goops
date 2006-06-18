@@ -30,6 +30,9 @@ private:
 public:
 	using SpectralFourierBase::wv;
 	using SpectralFourierBase::wv2;
+	using SpectralFourierBase::wnmax;
+	using SpectralFourierBase::nwn;
+	using SpectralFourierBase::wnstep;
 
 public:
   //Object to perform ffts
@@ -84,8 +87,6 @@ CVF d_dx_index_hat(const CVF & field, const int index);
   //Energy spectrum
 	cat::array<Real,1> eval_energ_spec(const CSF & field,const bool & kind);//scalar fields
 	cat::array<Real,1> eval_energ_spec(const CVF & field,const bool & kind);//vector fields
-	cat::array<Real,1> eval_energ_spec(const CSF & field,const int & npoints,const bool & kind);//scalar fields
-	cat::array<Real,1> eval_energ_spec(const CVF & field,const int & npoints,const bool & kind);//vector fields
 
   //print non-vanishing harmonics in real space
 	using SpectralFourierBase::pnvh_hat;

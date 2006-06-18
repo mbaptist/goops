@@ -50,6 +50,14 @@ void SpectralFourier::initialise()
       //evaluate the square of norm of wavevectors
 	wv2=norm_sq(wv);
 	
+	wnmax=max(wv2);
+	int mx12=n1>n2?n1/2+1:n2/2+1;
+	int mx=mx12>n3?mx12:n3;
+	int mn12=n1<n2?n1/2+1:n2/2+1;
+	int mn=mn12<n3?mn12:n3;
+	nwn=mn;
+	wnstep=wnmax/(nwn-1);
+	
 	dealiasing_limit=4./9.*max(wv2);
 	
   //initialise dealiasing mask
@@ -163,28 +171,12 @@ Real SpectralFourier::scalar_prod(const CVF & x,
 
 
 //Evaluate energy spectrum
+//dividing the sphere in npoints shells 
 //scalar fields
 cat::array<Real,1> SpectralFourier::eval_energ_spec(const CSF & field)
 {
-	int mx12=n1>n2?n1:n2;
-	int mx=mx12>n3?mx12:n3;
-	return eval_energ_spec(field,mx);
-}
-//vector fields
-cat::array<Real,1> SpectralFourier::eval_energ_spec(const CVF & field)
-{
-	int mx12=n1>n2?n1:n2;
-	int mx=mx12>n3?mx12:n3;
-	return eval_energ_spec(field,mx);
-}
-//Evaluate energy spectrum
-//dividing the sphere in npoints shells 
-//scalar fields
-cat::array<Real,1> SpectralFourier::eval_energ_spec(const CSF & field,const int & npoints)
-{
-	cat::array<Real,1> out(npoints);
+	cat::array<Real,1> out(nwn-1);
 	out=0;
-	Real wv2step=max(wv2)/(npoints-1);
 	CSF::const_iterator field_iterator(field);
 	RSF::iterator wv2_iterator(wv2);
 	for(field_iterator=field.begin(),
@@ -193,16 +185,15 @@ cat::array<Real,1> SpectralFourier::eval_energ_spec(const CSF & field,const int 
 	    wv2_iterator!=wv2.end();
 	    ++field_iterator,
 	    ++wv2_iterator)
-		out(static_cast<int>((*wv2_iterator)/wv2step))+=
+		out(static_cast<int>(sqrt(*wv2_iterator)/wnstep))+=
 		((*field_iterator)*conj(*field_iterator)).real();
 	return out;
 }
 //vector fields
-cat::array<Real,1> SpectralFourier::eval_energ_spec(const CVF & field,const int & npoints)
+cat::array<Real,1> SpectralFourier::eval_energ_spec(const CVF & field)
 {
-	cat::array<Real,1> out(npoints);
+	cat::array<Real,1> out(nwn-1);
 	out=0;
-	Real wv2step=max(wv2)/(npoints-1);
 	CVF::const_iterator field_iterator(field);
 	RSF::iterator wv2_iterator(wv2);
 	for(field_iterator=field.begin(),
@@ -211,7 +202,7 @@ cat::array<Real,1> SpectralFourier::eval_energ_spec(const CVF & field,const int 
 	    wv2_iterator!=wv2.end();
 	    ++field_iterator,
 	    ++wv2_iterator)
-		out(static_cast<int>((*wv2_iterator)/wv2step))+=
+		out(static_cast<int>(sqrt(*wv2_iterator)/wnstep))+=
 		norm_sq(*field_iterator);
 	return out;
 }

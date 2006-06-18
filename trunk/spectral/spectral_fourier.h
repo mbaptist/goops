@@ -13,10 +13,25 @@
 class SpectralFourier : public SpectralFourierBase
 {
   //Members
-	
+private:
+	using SpectralFourierBase::n1;
+	using SpectralFourierBase::n2;
+	using SpectralFourierBase::n3;
+	using SpectralFourierBase::n1_hat;
+	using SpectralFourierBase::n2_hat;
+	using SpectralFourierBase::n3_hat;
+	using SpectralFourierBase::l1;
+	using SpectralFourierBase::l2;
+	using SpectralFourierBase::l3;
+	using SpectralFourierBase::ar1;
+	using SpectralFourierBase::ar2;
+	using SpectralFourierBase::ar3;
 public:
 	using SpectralFourierBase::wv;
 	using SpectralFourierBase::wv2;
+	using SpectralFourierBase::wnmax;
+	using SpectralFourierBase::nwn;
+	using SpectralFourierBase::wnstep;
 
 public:
   //Object to perform ffts
@@ -67,9 +82,6 @@ private:
     //Energy spectrum
 	cat::array<Real,1> eval_energ_spec(const CSF & field);//scalar fields
 	cat::array<Real,1> eval_energ_spec(const CVF & field);//vector fields
-	cat::array<Real,1> eval_energ_spec(const CSF & field,const int & npoints);//scalar fields
-	cat::array<Real,1> eval_energ_spec(const CVF & field,const int & npoints);//vector fields
-
 
   //print non-vanishing harmonics
 	using SpectralFourierBase::pnvh_hat;
