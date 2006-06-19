@@ -109,3 +109,37 @@ void SpectralFourierBase::pnvh_hat(const CVF & field)
 		if(norm(*field_iter)>1e-10)
 			cout << field_iter.indices() << " " << *field_iter << endl;
 }
+
+Real SpectralFourierBase::energy(const RSF & field)
+{
+	//Performs the integral in <field,field> using the trapezoidal rule
+	Real tmp=0;
+	for(int i=0;i<n1;++i)
+		for(int j=0;j<n2;++j)
+			for(int k=0;k<n3;++k)
+			{
+				if(k==0||k==n3-1)
+					tmp+=field(i,j,k)*field(i,j,k);
+				else
+					tmp+=2*field(i,j,k)*field(i,j,k);
+			}
+	return  .5*tmp*(l1*l2*l3)/(n1*n2*(n3-1))/2.;
+}
+
+
+Real SpectralFourierBase::energy(const RVF & field)
+{
+	//Performs the integral in <field,field> using the trapezoidal rule
+	Real tmp=0;
+	for(int i=0;i<n1;++i)
+		for(int j=0;j<n2;++j)
+			for(int k=0;k<n3;++k)
+			{
+				if(k==0||k==n3-1)
+					tmp+=norm_sq(field(i,j,k));
+				else
+					tmp+=2*norm_sq(field(i,j,k));
+			}
+	return  .5*tmp*(l1*l2*l3)/(n1*n2*(n3-1))/2.;
+}
+
