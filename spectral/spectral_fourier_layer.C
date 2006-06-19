@@ -48,7 +48,7 @@ void SpectralFourierLayer::initialise()
 	int mx=mx12>n3?mx12:n3;
 	int mn12=n1<n2?n1/2+1:n2/2+1;
 	int mn=mn12<n3?mn12:n3;
-	nwn=mn;
+	nwn=mx;
 	wnstep=wnmax/(nwn-1);
 	
 	//Set dealiasing limit

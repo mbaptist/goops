@@ -55,7 +55,10 @@ public:
   //print non-vanishing harmonics in fourier space
 	void pnvh_hat(const CSF & field);//scalar field
 	void pnvh_hat(const CVF & field);//vector field
-    
+
+	//function that evaluates the energy in real space
+	Real energy(const RSF & field);
+	Real energy(const RVF & field);
 };
 
 #endif
