@@ -139,7 +139,7 @@ void FFT<cat::array<RS,D>,cat::array<RS,D> >::sin_direct_transform(cat::array<RS
 	direct_plan.execute(ff,rf);
 	
 	fourierfield(0)=0;
-	fourierfield/=(realfield.size()-1);
+	fourierfield*=1./(realfield.size()-1);
 		fourierfield(fourierfield.size()-1)=0;
 }
 
@@ -194,7 +194,7 @@ void FFT<cat::array<RS,D>,cat::array<RS,D> >::cos_direct_transform(cat::array<RS
 	//direct_plan.execute();
 	direct_plan.execute(fourierfield,realfield);
 	fourierfield(0)*=.5;
-	fourierfield/=(realfield.size()-1);
+	fourierfield*=1./(realfield.size()-1);
 }
 
 //1D Real to Real inverse co-sine transform
