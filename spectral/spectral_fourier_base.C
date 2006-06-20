@@ -121,7 +121,7 @@ Real SpectralFourierBase::energy(const RSF & field)
 				if(k==0||k==n3-1)
 					tmp+=field(i,j,k)*field(i,j,k);
 				else
-					tmp+=2*field(i,j,k)*field(i,j,k);
+					tmp+=2.*field(i,j,k)*field(i,j,k);
 			}
 	return  .5*tmp*(l1*l2*l3)/(n1*n2*(n3-1))/2.;
 }
@@ -138,7 +138,7 @@ Real SpectralFourierBase::energy(const RVF & field)
 				if(k==0||k==n3-1)
 					tmp+=norm_sq(field(i,j,k));
 				else
-					tmp+=2*norm_sq(field(i,j,k));
+					tmp+=2.*norm_sq(field(i,j,k));
 			}
 	return  .5*tmp*(l1*l2*l3)/(n1*n2*(n3-1))/2.;
 }
