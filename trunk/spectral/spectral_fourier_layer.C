@@ -44,11 +44,11 @@ void SpectralFourierLayer::initialise()
 	wv2=norm_sq(wv);
 
 	wnmax=sqrt(max(wv2));
-	int mx12=n1>n2?(n1/2):(n2/2);
+	int mx12=n1>n2?(n1/2+1):(n2/2+1);
 	int mx=mx12>n3?mx12:n3;
-	int mn12=n1<n2?(n1/2):(n2/2);
+	int mn12=n1<n2?(n1/2+1):(n2/2+1);
 	int mn=mn12<n3?mn12:n3;
-	nwn=mn;
+	nwn=mx;
 	wnstep=wnmax/(nwn-1);
 	
 	//Set dealiasing limit
@@ -209,7 +209,7 @@ Real SpectralFourierLayer::scalar_prod(const CVF & x,const CVF & y) const
 //scalar fields
 cat::array<Real,1> SpectralFourierLayer::eval_energ_spec(const CSF & field,const bool & kind)
 {
-	cat::array<Real,1> out(nwn-1);
+	cat::array<Real,1> out(nwn);
 	out=0;	
 	CSF::const_iterator field_iterator(field);
 	RSF::iterator wv2_iterator(wv2);
@@ -220,19 +220,19 @@ cat::array<Real,1> SpectralFourierLayer::eval_energ_spec(const CSF & field,const
 	    ++field_iterator,
 	    ++wv2_iterator)
 	{
-		double mf=1;
+		double mf=1.;
 		if((field_iterator.indices())[2]!=0)
-			mf*=1;
+			mf*=1.;
 		else if(kind==1)
-			mf*=2;
+			mf*=2.;
 		else if(kind==0)
-			mf*=0;
-		if((field_iterator.indices())[2]==n1-1)
-			mf*=2;
+			mf*=0.;
+		int index=static_cast<int>(sqrt(*wv2_iterator)/wnstep);
+		//cout << index << endl;
 		if((field_iterator.indices())[1]==0)
-			out(static_cast<int>(sqrt(*wv2_iterator)/wnstep))+=mf*.5*((*field_iterator)*conj(*field_iterator)).real();
+			out(index)+=mf*.5*((*field_iterator)*conj(*field_iterator)).real();
 		else
-			out(static_cast<int>(sqrt(*wv2_iterator)/wnstep))+=mf*((*field_iterator)*conj(*field_iterator)).real();
+			out(index)+=mf*((*field_iterator)*conj(*field_iterator)).real();
 	}
 	out*=.5/wnstep;
 	return out;
@@ -265,3 +265,4 @@ void SpectralFourierLayer::pnvh(const RVF & field,const bool & kind)
 		fft_ssc.direct_transform(field_hat,field);
 	SpectralFourierBase::pnvh_hat(field_hat);
 }
+
