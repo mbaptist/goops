@@ -140,7 +140,7 @@ void FFT<cat::array<RS,D>,cat::array<RS,D> >::sin_direct_transform(cat::array<RS
 	
 	fourierfield(0)=0;
 	fourierfield*=1./(realfield.size()-1);
-		fourierfield(fourierfield.size()-1)=0;
+	fourierfield(fourierfield.size()-1)=0;
 }
 
 //1D Real to Real inverse sine transform
@@ -148,6 +148,7 @@ template <>
 template <int D>
 void FFT<cat::array<RS,D>,cat::array<RS,D> >::sin_inverse_transform(cat::array<RS,D> & realfield,const cat::array<RS,D> & fourierfield)
 {
+	//cout << "SINE INVERSE TRANSFORM" << endl;
 		//cat::array<RS,D> rf=cat::array<RS,D>(cat::tvector<int,D>(realfield.size()-2),realfield.data()+1);
 		size_t len=realfield.length()-2;
 			cat::array<RS,D> rf(cat::tvector<int,D>(realfield.size()-2),
@@ -180,9 +181,9 @@ void FFT<cat::array<RS,D>,cat::array<RS,D> >::sin_inverse_transform(cat::array<R
 		//exit(0);
 		
 		//cout << realfield << endl;
-		realfield(0)=0;
+	realfield(0)=0;
 	realfield*=.5;
-		realfield(realfield.size()-1)=0;
+	realfield(realfield.size()-1)=0;
 }
 //1D Real to Real direct co-sine transform 
 template <>
