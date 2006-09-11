@@ -137,9 +137,9 @@ CVF SpectralFourier::remove_gradient(CVF & field)
 {
 	CVF out(field.shape());
 	CSF sout(field.shape());
-	sout=div_hat(field);
+	//sout=div_hat(field);
 	wv2(0,0,0)=1;
-	sout/=(-wv2);
+	sout=div_hat(field)/(-wv2);
 	wv2(0,0,0)=1e-30;
 	out=grad_hat(sout);
 	field-=out;
