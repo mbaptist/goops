@@ -85,7 +85,7 @@ CSF SpectralFourierBase::poisson_hat(const CSF & field)
 CVF SpectralFourierBase::poisson_hat(const CVF & field)
 {
 	CVF out(field.shape());
-	//out=field;
+	out=field;
 	wv2(0,0,0)=1;
 	out/=(-wv2);
 	wv2(0,0,0)=1e-30;
