@@ -91,16 +91,7 @@ CVF SpectralFourierBase::poisson_hat(const CVF & field)
 	wv2(0,0,0)=1e-30;
 	return out;
 }
-//   //Solve lap(f)=g in fourier space - vectors
-// template <class T>
-// T SpectralFourierBase::poisson_hat(const ArrayExpression<T> & field)
-// {
-// 	T out(field.shape());
-// 	wv2(0,0,0)=1;
-// 	out=field/(-wv2);
-// 	wv2(0,0,0)=1e-30;
-// 	return out;
-// }
+
 //Printing non-vanishing harmonics in a field
 //scalar fields in fourier space
 void SpectralFourierBase::pnvh_hat(const CSF & field)
