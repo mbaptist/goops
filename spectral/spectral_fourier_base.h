@@ -51,8 +51,6 @@ public:
   //Solve lap(f)=g in fourier space
 	CSF poisson_hat(const CSF & field);//scalar field
 	CVF poisson_hat(const CVF & field);//vector field
-/*	 template <class T>
-		T poisson_hat(const ArrayExpression<T> & field);*/
 		
   //print non-vanishing harmonics in fourier space
 	void pnvh_hat(const CSF & field);//scalar field
