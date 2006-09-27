@@ -193,7 +193,7 @@ Real SpectralFourierLayer::scalar_prod(const CSF & x,const CSF & y) const
 	return Real(scalar_prod(x,y,0));
 }
 
-//vectros
+//vectors
 Real SpectralFourierLayer::scalar_prod(const CVF & x,const CVF & y,const bool kind) const
 {
 	return Real(scalar_prod(x[0],y[0],!kind)+scalar_prod(x[1],y[1],!kind)+scalar_prod(x[2],y[2],kind));
