@@ -6,6 +6,9 @@
 #include "../goops_types.h"
 #include "../fft/fft.h"
 
+#include<cmath>
+#include<complex>
+
 #include <cat.h>
 
 using namespace std;
@@ -135,7 +138,6 @@ Real SpectralFourierLayer::scalar_prod(const CSF & x,const CSF & y,const bool ki
 		{
 			zerokz+=real(x(i,0,0)*conj(y(i,0,0)));
 		}
-	
 		for(int i=0;i<n1;++i)
 			for(int j=1;j<n2/2+1;++j)
 				zerokz+=real(x(i,j,0)*conj(y(i,j,0)));
@@ -153,7 +155,6 @@ Real SpectralFourierLayer::scalar_prod(const CSF & x,const CSF & y,const bool ki
 		for(int j=1;j<n2/2+1;++j)
 			for(int k=1;k<n3;++k)
 				otherkz+=real(x(i,j,k)*conj(y(i,j,k)));
-	
 	return Real(zerokz+otherkz);
 #endif
 	
