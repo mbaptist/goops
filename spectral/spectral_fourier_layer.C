@@ -55,7 +55,7 @@ void SpectralFourierLayer::initialise()
 	wnstep=wnmax/(nwn-1);
 	
 	//Set dealiasing limit
-	dealiasing_limit=4./9.*max(wv2);
+	dealiasing_limit=4./9.*pow(max(wv[2]),2);
 	
   //initialise dealiasing mask
 	cat::array<bool,3>::iterator dm_iter(dealiasing_mask);
@@ -157,7 +157,31 @@ Real SpectralFourierLayer::scalar_prod(const CSF & x,const CSF & y,const bool ki
 				otherkz+=real(x(i,j,k)*conj(y(i,j,k)));
 	return Real(zerokz+otherkz);
 #endif
+#if 0
+	Real zerokz=0;
+	Real otherkz=0;
+
+	if (kind==1)//if cosine
+	{
+		for(int i=0;i<n1;++i)
+			for(int j=1;j<n2/2+1;++j)
+					zerokz+=real(x(i,j,0)*conj(y(i,j,0)));
+		zerokz*=2;
+		for(int i=0;i<n1;++i)
+				zerokz+=real(x(i,0,0)*conj(y(i,0,0)));
+	}
+	//sin and cosine
+	for(int i=0;i<n1;++i)
+		for(int k=1;k<n3;++k)
+			otherkz+=real(x(i,0,k)*conj(y(i,0,k)));
+	otherkz*=.5;
+	for(int i=0;i<n1;++i)
+		for(int j=1;j<n2/2+1;++j)
+			for(int k=1;k<n3;++k)
+				otherkz+=real(x(i,j,k)*conj(y(i,j,k)));
+	return Real(zerokz+otherkz);
 	
+#endif
 #if 0
 	Real out;
 	out=0;
