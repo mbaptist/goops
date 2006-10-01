@@ -55,7 +55,12 @@ void SpectralFourierLayer::initialise()
 	wnstep=wnmax/(nwn-1);
 	
 	//Set dealiasing limit
-	dealiasing_limit=4./9.*pow(max(wv[2]),2);
+	Real wvmx0=max(wv[0]);
+	Real wvmx1=max(wv[1]);
+	Real wvmx2=max(wv[2]);
+  Real min_wvmx01=(wvmx0<wvmx1?wvmx0:wvmx1);
+  Real min_wvmx=	(min_wvmx01<wvmx2?min_wvmx01:wvmx2);
+	dealiasing_limit=4./9.*pow(min_wvmx,2);
 	
   //initialise dealiasing mask
 	cat::array<bool,3>::iterator dm_iter(dealiasing_mask);
