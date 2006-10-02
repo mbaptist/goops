@@ -62,6 +62,7 @@ void SpectralFourierLayer::initialise()
   Real min_wvmx=	(min_wvmx01<wvmx2?min_wvmx01:wvmx2);
 	dealiasing_limit=4./9.*pow(min_wvmx,2);
 	
+	
   //initialise dealiasing mask
 	cat::array<bool,3>::iterator dm_iter(dealiasing_mask);
 	RSF::const_iterator wv2_iter(wv2);
