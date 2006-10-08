@@ -74,21 +74,21 @@ CVF SpectralFourierBase::lap_hat(const CVF & field)
   //Solve lap(f)=g in fourier space - scalars
 CSF SpectralFourierBase::poisson_hat(const CSF & field)
 {
-	CSF out(field.shape());
-	out=field;
-	wv2(0,0,0)=1;
+	CSF out(field);
+	wv2(0,0,0)=1.;
 	out/=(-wv2);
 	wv2(0,0,0)=1e-30;
+	out(0,0,0)=0.;
 	return out;
 }
   //Solve lap(f)=g in fourier space - vectors
 CVF SpectralFourierBase::poisson_hat(const CVF & field)
 {
-	CVF out(field.shape());
-	out=field;
-	wv2(0,0,0)=1;
+	CVF out(field);
+	wv2(0,0,0)=1.;
 	out/=(-wv2);
 	wv2(0,0,0)=1e-30;
+	out(0,0,0)=0.;
 	return out;
 }
 
