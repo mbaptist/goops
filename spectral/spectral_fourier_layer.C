@@ -123,9 +123,10 @@ return CVF(cross_product(cat::tvector<Complex,3>(I,I,(kind?1:-1))*wv,field));
 CVF SpectralFourierLayer::remove_gradient(CVF & field,const bool kind)
 {
 	CVF out(field.shape());
-	wv2(0,0,0)=1;
+	wv2(0,0,0)=1.;
 	out=grad_hat(-div_hat(field,kind)/wv2,!kind);
 	wv2(0,0,0)=1e-30;
+	out(0,0,0)=0.;
 	field-=out;
 	return out;
 }
