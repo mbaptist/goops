@@ -51,8 +51,9 @@ void SpectralFourierLayer::initialise()
 	int mx=mx12>n3?mx12:n3;
 	int mn12=n1<n2?(n1/2+1):(n2/2+1);
 	int mn=mn12<n3?mn12:n3;
-	nwn=mx;
-	wnstep=wnmax/(nwn-1);
+// 	nwn=mx;
+//  	wnstep=wnmax/(nwn-1);
+
 	
 	//Set dealiasing limit
 	Real wvmx0=max(wv[0]);
@@ -61,7 +62,11 @@ void SpectralFourierLayer::initialise()
   Real min_wvmx01=(wvmx0<wvmx1?wvmx0:wvmx1);
   Real min_wvmx=	(min_wvmx01<wvmx2?min_wvmx01:wvmx2);
 	dealiasing_limit=4./9.*pow(min_wvmx,2);
-	
+
+	nwn=static_cast<int>(2.*(n3_hat-1)/3.)+1;
+	cout << nwn << endl;
+	wnstep=2.*min_wvmx/3./(nwn-1);
+	cout << wnstep << endl;
 	
   //initialise dealiasing mask
 	cat::array<bool,3>::iterator dm_iter(dealiasing_mask);
@@ -242,31 +247,33 @@ Real SpectralFourierLayer::scalar_prod(const CVF & x,const CVF & y) const
 cat::array<Real,1> SpectralFourierLayer::eval_energ_spec(const CSF & field,const bool & kind)
 {
 	cat::array<Real,1> out(nwn);
-	out=0;	
+	out=0;
 	CSF::const_iterator field_iterator(field);
 	RSF::iterator wv2_iterator(wv2);
-	for(field_iterator=field.begin(),
-	    wv2_iterator=wv2.begin();
-	    field_iterator!=field.end(),
-	    wv2_iterator!=wv2.end();
-	    ++field_iterator,
-	    ++wv2_iterator)
+	field_iterator=field.begin();
+	wv2_iterator=wv2.begin();
+	while(wv2_iterator!=wv2.end())
 	{
-		double mf=1.;
-		if((field_iterator.indices())[2]!=0)
-			mf*=1.;
-		else if(kind==1)
-			mf*=2.;
+		if(*wv2_iterator<=dealiasing_limit)
+		{
+			double mf=1.;
+			if((field_iterator.indices())[2]!=0)
+				mf*=1.;
+			else if(kind==1)
+				mf*=2.;
 		else if(kind==0)
 			mf*=0.;
-		int index=static_cast<int>(sqrt(*wv2_iterator)/wnstep);
-		//cout << index << endl;
-		if((field_iterator.indices())[1]==0)
-			out(index)+=mf*.5*((*field_iterator)*conj(*field_iterator)).real();
-		else
-			out(index)+=mf*((*field_iterator)*conj(*field_iterator)).real();
+			int index=static_cast<int>(sqrt(*wv2_iterator)/wnstep);
+			if((field_iterator.indices())[1]==0)
+				out(index)+=mf*.5*((*field_iterator)*conj(*field_iterator)).real();
+			else
+				out(index)+=mf*((*field_iterator)*conj(*field_iterator)).real();
+		}
+		++field_iterator;
+		++wv2_iterator;
 	}
 	out*=.5/wnstep;
+	//cout << "Returning..." << endl;
 	return out;
 }
 //vector fields
