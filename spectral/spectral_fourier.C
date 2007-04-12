@@ -1,3 +1,25 @@
+/*
+
+Copyright 2004,2005,2006 Manuel Baptista
+
+This file is part of GOOPS
+
+GOOPS is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+GOOPS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+*/
+
 
 #include "spectral_fourier.h"
 
@@ -18,7 +40,7 @@ SpectralFourierBase(n1__,n2__,n3__,
                     n1__,n2__,n3__/2+1,
                     l1__,l2__,l3__,
                     2*M_PI/l1__,2*M_PI/l2__,M_PI/l3__),
-fft(cat::tvector<int,3>(n1,n2,n3)),
+fft(cat::Tvector<int,3>(n1,n2,n3)),
 sfft()
 {
 	initialise();
@@ -32,16 +54,16 @@ void SpectralFourier::initialise()
 		for (int j=0;j<n2/2+1;++j)
 		{
 			for (int i=0;i<n1/2+1;++i)
-				wv(i,j,k)=cat::tvector<Real,3>(ar1*i,ar2*j,ar3*k);
+				wv(i,j,k)=cat::Tvector<Real,3>(ar1*i,ar2*j,ar3*k);
 			for (int i=n1/2+1;i<n1;++i)
-				wv(i,j,k)=cat::tvector<Real,3>(ar1*(i-n1),ar2*j,ar3*k);
+				wv(i,j,k)=cat::Tvector<Real,3>(ar1*(i-n1),ar2*j,ar3*k);
 		}
 		for (int j=n2/2+1;j<n2;++j)
 		{
 			for (int i=0;i<n1/2+1;++i)
-				wv(i,j,k)=cat::tvector<Real,3>(ar1*i,ar2*(j-n2),ar3*k);
+				wv(i,j,k)=cat::Tvector<Real,3>(ar1*i,ar2*(j-n2),ar3*k);
 			for (int i=n1/2+1;i<n1;++i)
-				wv(i,j,k)=cat::tvector<Real,3>(ar1*(i-n1),ar2*(j-n2),ar3*k);
+				wv(i,j,k)=cat::Tvector<Real,3>(ar1*(i-n1),ar2*(j-n2),ar3*k);
 		}
 	}
 	
@@ -61,7 +83,7 @@ void SpectralFourier::initialise()
 	dealiasing_limit=4./9.*max(wv2);
 	
   //initialise dealiasing mask
-	cat::array<bool,3>::iterator dm_iter(dealiasing_mask);
+	cat::Array<bool,3>::iterator dm_iter(dealiasing_mask);
 	RSF::const_iterator wv2_iter(wv2);
 	for(dm_iter=dealiasing_mask.begin(),wv2_iter=wv2.begin();
 	    dm_iter!=dealiasing_mask.end(),wv2_iter!=wv2.end();
@@ -105,7 +127,7 @@ CVF SpectralFourier::d_dx_index_hat(const CVF & field, const int index)
 CVF SpectralFourier::grad_hat(const CSF & field)
 {
 	CVF out(field.shape());
-	out=cat::tvector<Complex,3>(I,I,I);
+	out=cat::Tvector<Complex,3>(I,I,I);
 	out*=wv;
 	out*=field;
 	return out;
@@ -114,7 +136,7 @@ CVF SpectralFourier::grad_hat(const CSF & field)
 CSF SpectralFourier::div_hat(const CVF & field)
 {
 	CVF outc(field.shape());
-	outc=cat::tvector<Complex,3>(I,I,I);
+	outc=cat::Tvector<Complex,3>(I,I,I);
 	outc*=wv;
 	return CSF(dot_product(outc,field));
 }
@@ -124,7 +146,7 @@ CVF SpectralFourier::curl_hat(const CVF & field)
 {
 	CVF outc(field.shape());
     //Note that the z derivative acts on the 1st 2 components
-	outc=cat::tvector<Complex,3>(I,I,I);
+	outc=cat::Tvector<Complex,3>(I,I,I);
 	outc*=wv;
 	return CVF(cross_product(outc,field));
 }
@@ -173,9 +195,9 @@ Real SpectralFourier::scalar_prod(const CVF & x,
 //Evaluate energy spectrum
 //dividing the sphere in npoints shells 
 //scalar fields
-cat::array<Real,1> SpectralFourier::eval_energ_spec(const CSF & field)
+cat::Array<Real,1> SpectralFourier::eval_energ_spec(const CSF & field)
 {
-	cat::array<Real,1> out(nwn-1);
+	cat::Array<Real,1> out(nwn-1);
 	out=0;
 	CSF::const_iterator field_iterator(field);
 	RSF::iterator wv2_iterator(wv2);
@@ -190,9 +212,9 @@ cat::array<Real,1> SpectralFourier::eval_energ_spec(const CSF & field)
 	return out;
 }
 //vector fields
-cat::array<Real,1> SpectralFourier::eval_energ_spec(const CVF & field)
+cat::Array<Real,1> SpectralFourier::eval_energ_spec(const CVF & field)
 {
-	cat::array<Real,1> out(nwn-1);
+	cat::Array<Real,1> out(nwn-1);
 	out=0;
 	CVF::const_iterator field_iterator(field);
 	RSF::iterator wv2_iterator(wv2);
