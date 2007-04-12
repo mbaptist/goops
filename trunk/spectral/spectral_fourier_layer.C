@@ -1,3 +1,25 @@
+/*
+
+Copyright 2004,2005,2006 Manuel Baptista
+
+This file is part of GOOPS
+
+GOOPS is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+GOOPS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+*/
+
 
 #include "spectral_fourier_layer.h"
 
@@ -37,9 +59,9 @@ void SpectralFourierLayer::initialise()
 		for (int j=0;j<n2_hat;++j)
 		{
 			for (int i=0;i<n1_hat/2+1;++i)
-				wv(i,j,k)=cat::tvector<Real,3>(ar1*i,ar2*j,ar3*k);
+				wv(i,j,k)=cat::Tvector<Real,3>(ar1*i,ar2*j,ar3*k);
 			for (int i=n1_hat/2+1;i<n1_hat;++i)
-				wv(i,j,k)=cat::tvector<Real,3>(ar1*(i-n1_hat),ar2*j,ar3*k);
+				wv(i,j,k)=cat::Tvector<Real,3>(ar1*(i-n1_hat),ar2*j,ar3*k);
 		}
 	wv(0,0,0)=1e-30;
 	
@@ -62,6 +84,8 @@ void SpectralFourierLayer::initialise()
   Real min_wvmx01=(wvmx0<wvmx1?wvmx0:wvmx1);
   Real min_wvmx=	(min_wvmx01<wvmx2?min_wvmx01:wvmx2);
 	dealiasing_limit=4./9.*pow(min_wvmx,2);
+  
+  //cout << "DL:" << dealiasing_limit << endl;
 
 	nwn=static_cast<int>(2.*(n3_hat-1)/3.)+1;
 	cout << nwn << endl;
@@ -69,7 +93,7 @@ void SpectralFourierLayer::initialise()
 	cout << wnstep << endl;
 	
   //initialise dealiasing mask
-	cat::array<bool,3>::iterator dm_iter(dealiasing_mask);
+	cat::Array<bool,3>::iterator dm_iter(dealiasing_mask);
 	RSF::const_iterator wv2_iter(wv2);
 	for(dm_iter=dealiasing_mask.begin(),wv2_iter=wv2.begin();
 	    dm_iter!=dealiasing_mask.end(),wv2_iter!=wv2.end();
@@ -107,20 +131,20 @@ CVF SpectralFourierLayer::d_dx_index_hat(const CVF & field, const int index)
 //Gradient of scalar field
 CVF SpectralFourierLayer::grad_hat(const CSF & field,const bool kind)
 {
-return CVF(cat::tvector<Complex,3>(I,I,(kind?-1:1))*wv*field);
+return CVF(cat::Tvector<Complex,3>(I,I,(kind?-1:1))*wv*field);
 }
 
 //Divergence of vector field
 CSF SpectralFourierLayer::div_hat(const CVF & field,const bool kind)
 {
-return CSF(dot_product(cat::tvector<Complex,3>(I,I,(kind?-1:1))*wv,field));
+return CSF(dot_product(cat::Tvector<Complex,3>(I,I,(kind?-1:1))*wv,field));
 }
 
 //Curl of vector field
 CVF SpectralFourierLayer::curl_hat(const CVF & field,const bool kind)
 {
   //Note that the z derivative acts on the 1st 2 components
-return CVF(cross_product(cat::tvector<Complex,3>(I,I,(kind?1:-1))*wv,field));
+return CVF(cross_product(cat::Tvector<Complex,3>(I,I,(kind?1:-1))*wv,field));
 }
 
 //Extract gradient part 
@@ -244,9 +268,9 @@ Real SpectralFourierLayer::scalar_prod(const CVF & x,const CVF & y) const
 //Evaluate energy spectrum
 //dividing the sphere in nwn-1 shells
 //scalar fields
-cat::array<Real,1> SpectralFourierLayer::eval_energ_spec(const CSF & field,const bool & kind)
+cat::Array<Real,1> SpectralFourierLayer::eval_energ_spec(const CSF & field,const bool & kind)
 {
-	cat::array<Real,1> out(nwn);
+	cat::Array<Real,1> out(nwn);
 	out=0;
 	CSF::const_iterator field_iterator(field);
 	RSF::iterator wv2_iterator(wv2);
@@ -277,9 +301,9 @@ cat::array<Real,1> SpectralFourierLayer::eval_energ_spec(const CSF & field,const
 	return out;
 }
 //vector fields
-cat::array<Real,1> SpectralFourierLayer::eval_energ_spec(const CVF & field,const bool & kind)
+cat::Array<Real,1> SpectralFourierLayer::eval_energ_spec(const CVF & field,const bool & kind)
 {
-	return cat::array<Real,1>(eval_energ_spec(field[0],!kind)+eval_energ_spec(field[1],!kind)+eval_energ_spec(field[2],kind));
+	return cat::Array<Real,1>(eval_energ_spec(field[0],!kind)+eval_energ_spec(field[1],!kind)+eval_energ_spec(field[2],kind));
 }
 
 
