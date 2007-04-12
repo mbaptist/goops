@@ -1,0 +1,2 @@
+all:
+	g++ testsffthz.C -o testsffthz -L.. -lgoops -I../../cat -lfftw3
