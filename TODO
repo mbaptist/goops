@@ -1,0 +1,13 @@
+
+
+11/08/2006:
+
+Implement vector transforms at once.
+Implement mixed transforms (sin/cos in z) at once.
+Implement scalar heterogeneous transforms, using generalised slices (requires generalised slices in cat)
+Write up documentation
+Write up test suite
+Add normalise to spectrum
+Generalise to finite boundaries and other geometries
+
+
