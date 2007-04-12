@@ -1,3 +1,25 @@
+/*
+
+Copyright 2004,2005,2006 Manuel Baptista
+
+This file is part of GOOPS
+
+GOOPS is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+GOOPS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+*/
+
 //
 // C++ Interface: fft
 //
@@ -46,10 +68,10 @@ public:
 
 template <>
 template <int D>
-class FFT<cat::array<CS,D>,cat::array<CS,D> >
+class FFT<cat::Array<CS,D>,cat::Array<CS,D> >
 {
-	typedef cat::array<CS,D> RealType;
-	typedef cat::array<CS,D> FourierType;
+	typedef cat::Array<CS,D> RealType;
+	typedef cat::Array<CS,D> FourierType;
 public:
 	Plan<FourierType,const RealType> direct_plan;
 	Plan<RealType,const FourierType> inverse_plan;
@@ -70,10 +92,10 @@ public:
 
 template <>
 template <int D>
-class FFT<cat::array<RS,D>,cat::array<RS,D> >
+class FFT<cat::Array<RS,D>,cat::Array<RS,D> >
 {
-	typedef cat::array<RS,D> RealType;
-	typedef cat::array<RS,D> FourierType;
+	typedef cat::Array<RS,D> RealType;
+	typedef cat::Array<RS,D> FourierType;
 	typedef void (FFT::* DTT)(FourierType & fourierfield,const RealType & realfield);
 	typedef void (FFT::* ITT)(RealType & realfield,const FourierType & fourierfield);
 public:
