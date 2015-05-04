@@ -1,11 +1,16 @@
-project(libgoops)
-cmake_minimum_required(VERSION 2.8)
+set(LIB_TARGET goops)
 
+find_package (Cat)
+if (CAT_FOUND)
+  include_directories(${CAT_INCLUDE_DIR})
+  set(LIBS ${LIBS} ${CAT_LIBRARIES})
+endif (CAT_FOUND)
 
-set(CAT_INSTALL_DIR "${CMAKE_SOURCE_DIR}/../cat/install")
-include_directories("${CAT_INSTALL_DIR}/include/cat")
-link_directories("${CAT_INSTALL_DIR}/lib")
-
+find_package (FFTW)
+if (FFTW_FOUND)
+  include_directories(${FFTW_INCLUDE_DIR})
+  set(LIBS ${LIBS} ${FFTW_LIBRARIES})
+endif (FFTW_FOUND)
 
 set(GOOPS_DIR "${CMAKE_SOURCE_DIR}/goops")
 
@@ -13,14 +18,12 @@ include_directories("${GOOPS_DIR}")
 include_directories("${GOOPS_DIR}/fft")
 include_directories("${GOOPS_DIR}/spectral")
 
-
 set(GOOPS_HEADERS
 
 "${GOOPS_DIR}/goops.h"
 "${GOOPS_DIR}/goops_types.h"
 
 )
-
 
 set(FFT_HEADERS
 
@@ -67,10 +70,15 @@ set(SPECTRAL_SOURCES
 
 )
 
-
-set(LIB_TARGET goops)
 add_library(${LIB_TARGET} SHARED ${FFT_SOURCES} ${SPECTRAL_SOURCES})
-target_link_libraries(goops cat)
+target_include_directories(${LIB_TARGET}
+  PUBLIC
+    # Headers used from source/build location:
+    "$<BUILD_INTERFACE:${GOOPS_DIR}>"
+    # Headers used from installed location:
+    "$<INSTALL_INTERFACE:include/goops>"     
+)
+target_link_libraries(${LIB_TARGET} ${LIBS})
 
 install (TARGETS ${LIB_TARGET} DESTINATION lib)
 install (FILES ${GOOPS_HEADERS} DESTINATION include/${LIB_TARGET})
